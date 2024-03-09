@@ -2,10 +2,11 @@ import type { APIRoute } from '../../ambient';
 import type { RequestEvent } from '@sveltejs/kit';
 import { storage } from '$lib/server/storage';
 
+let a = 1
 export const Apis: APIRoute = {
 	ok: {
 		GET() {
-			return storage.bucket ? 1 : 0;
+			return storage.bucket ? a++ : 0;
 		}
 	},
 	test: {
