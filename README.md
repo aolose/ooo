@@ -6,11 +6,11 @@
   - [x] put object
   - [x] get object
   - [x] list object
-  - [ ] del object
+  - [x] del object
   - [ ] test
 - [ ] Integrate Cloudflare D1
 - [ ] Integrate Cloudflare KV
-- [ ] Abstract storage interface
+- [x] Abstract storage interface
 - [ ] Add Storybook
   - [ ] configure
   - [ ] write demo
