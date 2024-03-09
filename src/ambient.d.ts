@@ -6,8 +6,9 @@ type MyDatabase = D1Database;
 type FileMeta = {
 	key: string;
 	name: string;
-	size: string;
+	size: number;
 	type: string;
+	updated: number;
 };
 
 type ApiFunction = (

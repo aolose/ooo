@@ -45,7 +45,8 @@
 				<tr>
 					<td><a href={`/res/${item.key}`}>{item.name}</a></td>
 					<td>{item.type}</td>
-					<td>{fileSize(parseInt(item.size, 36))}</td>
+					<td>{fileSize(item.size)}</td>
+					<td>{new Date(item.updated)}</td>
 					<td>
 						<button on:click={del(item.key)}>delete</button>
 					</td>
