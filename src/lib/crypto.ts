@@ -1,7 +1,3 @@
-export const encrypt = () => {
+export const encrypt = () => {};
 
-}
-
-export const decrypt = () => {
-
-}
+export const decrypt = () => {};
