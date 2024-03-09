@@ -2,7 +2,6 @@ import { bufHash } from '$lib/server/utils';
 import type { R2Bucket } from '@cloudflare/workers-types';
 import type { FileMeta } from '../../../../ambient';
 import { error } from '@sveltejs/kit';
-import { CacheHeaders } from 'miniflare';
 
 export const R2: { bucket?: R2Bucket } = {};
 export const getObj = async (key: string) => {
