@@ -2,7 +2,7 @@
 -  [x] Local Cloudflare Workers development
   - [x] configure Miniflare
 -  [ ] Integrate Cloudflare R2
--  [ ] Integrate Cloudflare R2
+-  [ ] Integrate Cloudflare KV
   - [x] put object
   - [x] get object
   - [x] list object
@@ -10,6 +10,7 @@
   - [ ] test
 - [ ] Integrate Cloudflare D1
 - [ ] Integrate Cloudflare KV
+- [ ] Abstract storage interface
 - [ ] Add Storybook
   - [ ] configure
   - [ ] write demo
