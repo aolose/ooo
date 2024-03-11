@@ -4,7 +4,7 @@ export const bufHash = async (buf: ArrayBuffer) => {
 };
 
 export const resp = (
-	data: null | undefined | BodyInit,
+	data: unknown,
 	status = 200,
 	headers?: Headers | object | Map<string, string>
 ) => {
@@ -32,8 +32,27 @@ export const resp = (
 		}
 		headers1.set('x-data-type', cType);
 	}
-	return new Response(data, {
+	return new Response(data as BodyInit, {
 		status,
 		headers: headers1
 	});
+};
+
+export const pick = <T>(o: T, ...keys: (keyof typeof o)[]) => {
+	const n = {} as typeof o;
+	keys.forEach((k) => (n[k] = o[k]));
+	return n;
+};
+
+export const tableStr = <T extends { [key: symbol | string]: unknown }>(
+	o: T[],
+	keys: string[],
+	split = '\0'
+) => {
+	if (!o.length) return '';
+	const data: unknown[] = [];
+	o.forEach((s) => {
+		keys.forEach((a) => data.push(s[a]));
+	});
+	return data.join(split);
 };

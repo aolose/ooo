@@ -1,6 +1,8 @@
 import type { Miniflare } from 'miniflare';
-import { initR2 } from '$lib/server/adapter/cloudflare/r2';
-import { BUCKET_NAME } from '$env/static/private';
+import { setR2 } from '$lib/server/adapter/cloudflare/r2';
+import { BUCKET_NAME, DB_NAME } from '$env/static/private';
+import { setD1 } from '$lib/server/adapter/cloudflare/d1';
+
 let mf: Miniflare;
 
 /**
@@ -20,7 +22,7 @@ export async function useLocal() {
 			// kvPersist: "./kv-data",
 			// kvNamespaces: ["KV"],
 			// d1Persist: "./d1-data",
-			d1Databases: ['D1'],
+			d1Databases: [DB_NAME],
 			r2Buckets: [BUCKET_NAME],
 			// you should also be able to add durable objects & r2
 			script: '',
@@ -28,6 +30,7 @@ export async function useLocal() {
 		});
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-expect-error
-		initR2(await mf.getR2Bucket('ooo'));
+		setR2(await mf.getR2Bucket(BUCKET_NAME));
+		setD1(await mf.getD1Database(DB_NAME));
 	}
 }

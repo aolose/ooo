@@ -1,14 +1,11 @@
 import { error } from '@sveltejs/kit';
-
 import type { RequestHandler } from './$types';
-import { storage } from '$lib/server/storage';
+import { bukCli } from '$lib/server/setup';
 
 export const GET: RequestHandler = async ({ params, url }) => {
 	const id = params.id;
 	if (!id) throw error(404, 'file not found');
-	if (!storage.bucket) throw error(500, 'bucket unset');
-	const res = await storage.bucket.get(id);
-	console.log(res);
+	const res = await bukCli.get(id);
 	const download = url.searchParams.get('d');
 	if (download) {
 		const headers = res.headers;
