@@ -1,5 +1,5 @@
 import type { Handle } from '@sveltejs/kit';
-import { apiHandler } from '$lib/server/apiRouter';
+import { apiHandler } from '$lib/server/apiHandler';
 import { filter } from '$lib/server/firewall';
 import { connect } from '$lib/server/setup';
 import { execSchema } from '$lib/server/schema';
