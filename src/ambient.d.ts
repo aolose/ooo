@@ -1,6 +1,5 @@
 import { HttpMethod, RequestEvent } from '@sveltejs/kit';
 import { D1Database, R2Bucket, KVNamespace, ReadableStream } from '@cloudflare/workers-types';
-import { list } from '$lib/server/adapter/cloudflare/kv';
 
 type KVItem = string | ArrayBuffer | ArrayBufferView | ReadableStream;
 type sqlTemplateTag = <T>(
