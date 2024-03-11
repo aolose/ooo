@@ -35,6 +35,6 @@ export default (kvCli: KVClient, bukCli: BucketClient, dbCli: DBClient) => {
 			setR2(env?.MY_BUCKET);
 			setD1(env?.D1);
 		}
-		if (tasks) tasks.forEach((f) => f());
+		if (tasks) await Promise.all(tasks.map((f) => f()));
 	};
 };
