@@ -39,6 +39,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@sveltejs/adapter-cloudflare": "^4.1.0"
+		"@sveltejs/adapter-cloudflare": "^4.1.0",
+		"cookie": "^0.6.0"
 	}
 }

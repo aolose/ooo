@@ -1,12 +1,15 @@
 import { HttpMethod, RequestEvent } from '@sveltejs/kit';
-import { D1Database, R2Bucket } from '@cloudflare/workers-types';
+import { D1Database, R2Bucket, KVNamespace, ReadableStream } from '@cloudflare/workers-types';
+import { list } from '$lib/server/adapter/cloudflare/kv';
 
+type KVItem = string | ArrayBuffer | ArrayBufferView | ReadableStream;
 type sqlTemplateTag = <T>(
 	raw: TemplateStringsArray | string,
 	...field: unknown[]
 ) => T | Promise<T>;
 type Bucket = R2Bucket;
 type Database = D1Database;
+type KV = KVNamespace;
 type FileMeta = {
 	key: string;
 	name: string;
@@ -30,8 +33,17 @@ type APIRoute = {
 type PlatformEnv = {
 	COUNTER: DurableObjectNamespace;
 	D1: Database;
+	KV: KV;
 	MY_BUCKET: Bucket;
 };
+
+type KVClient = {
+	get: (key: string) => Promise<string | null>;
+	set: (key: string, value: KVItem, expire? = 0) => Promise<void>;
+	del: (key: string) => Promise<void>;
+	list: () => Promise<[string, string | null][]>;
+};
+
 type DBClient = {
 	run: sqlTemplateTag<{ success: unknown; error: unknown }>;
 	first: sqlTemplateTag;

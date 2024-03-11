@@ -1,7 +1,8 @@
 import type { Miniflare } from 'miniflare';
 import { setR2 } from '$lib/server/adapter/cloudflare/r2';
-import { BUCKET_NAME, DB_NAME } from '$env/static/private';
+import { BUCKET_NAME, DB_NAME, KV_NAME } from '$env/static/private';
 import { setD1 } from '$lib/server/adapter/cloudflare/d1';
+import { setKV } from '$lib/server/adapter/cloudflare/kv';
 
 let mf: Miniflare;
 
@@ -20,7 +21,7 @@ export async function useLocal() {
 		mf = new Miniflare({
 			log: new Log(LogLevel.INFO),
 			// kvPersist: "./kv-data",
-			// kvNamespaces: ["KV"],
+			kvNamespaces: [KV_NAME],
 			// d1Persist: "./d1-data",
 			d1Databases: [DB_NAME],
 			r2Buckets: [BUCKET_NAME],
@@ -28,6 +29,9 @@ export async function useLocal() {
 			script: '',
 			modules: true
 		});
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
+		setKV(await mf.getKVNamespace(KV_NAME));
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-expect-error
 		setR2(await mf.getR2Bucket(BUCKET_NAME));

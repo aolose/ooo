@@ -1,6 +1,7 @@
-import type { BucketClient, DBClient } from '../../ambient';
+import type { BucketClient, DBClient, KVClient } from '../../ambient';
 import cloudflareConnector from './adapter/cloudflare';
 
 export const bukCli = {} as BucketClient;
 export const dbCli = {} as DBClient;
-export const connect = cloudflareConnector(bukCli, dbCli);
+export const kvCli = {} as KVClient;
+export const connect = cloudflareConnector(kvCli, bukCli, dbCli);

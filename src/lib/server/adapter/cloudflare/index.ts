@@ -1,11 +1,18 @@
-import type { BucketClient, DBClient, PlatformEnv } from '../../../../ambient';
+import type { BucketClient, DBClient, KVClient, PlatformEnv } from '../../../../ambient';
 import { dev } from '$app/environment';
 import { useLocal } from '$lib/server/adapter/cloudflare/dev';
 import { all, first, run, setD1 } from '$lib/server/adapter/cloudflare/d1';
 import { delObj, getObj, setR2, listObj, putObj } from '$lib/server/adapter/cloudflare/r2';
+import { get, set, del, list, setKV } from './kv';
 
-export default (bukCli: BucketClient, dbCli: DBClient) => {
+export default (kvCli: KVClient, bukCli: BucketClient, dbCli: DBClient) => {
 	console.log('use cloudflare.');
+	Object.assign(kvCli, {
+		get,
+		set,
+		del,
+		list
+	});
 	Object.assign(bukCli, {
 		init: setR2,
 		get: getObj,
@@ -24,6 +31,7 @@ export default (bukCli: BucketClient, dbCli: DBClient) => {
 		done = 1;
 		if (dev) await useLocal();
 		else {
+			setKV(env?.KV);
 			setR2(env?.MY_BUCKET);
 			setD1(env?.D1);
 		}

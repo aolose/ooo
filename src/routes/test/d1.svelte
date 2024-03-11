@@ -2,6 +2,7 @@
 	import { api } from '$lib/req';
 	import { onMount } from 'svelte';
 	import { toTable } from '$lib/utils';
+	import Table from '$lib/components/table.svelte';
 
 	let list = [] as unknown[][];
 	const head = ['CustomerName', 'CompanyName', 'ContactName'];
@@ -25,39 +26,18 @@
 	<legend>DB TEST</legend>
 	<button on:click={add}>ADD</button>
 	<button on:click={clear}>Clear</button>
-	<table>
-		<thead>
+	<Table>
+		<tr slot="thead">
+			{#each head as h}
+				<th>{h}</th>
+			{/each}
+		</tr>
+		{#each list as item}
 			<tr>
-				{#each head as h}
-					<th>{h}</th>
+				{#each item as d}
+					<td>{d}</td>
 				{/each}
 			</tr>
-		</thead>
-		<tbody>
-			{#each list as item}
-				<tr>
-					{#each item as d}
-						<td>{d}</td>
-					{/each}
-				</tr>
-			{/each}
-		</tbody>
-	</table>
+		{/each}
+	</Table>
 </fieldset>
-
-<style lang="scss">
-	table {
-		width: 100%;
-		background: #fefefe;
-		border-collapse: collapse;
-		text-align: left;
-		th {
-			padding: 5px;
-			background: rgba(0, 0, 0, 0.1);
-		}
-		td {
-			padding: 5px;
-			border: 1px solid #ddd;
-		}
-	}
-</style>
