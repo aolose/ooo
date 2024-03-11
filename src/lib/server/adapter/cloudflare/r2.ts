@@ -51,10 +51,13 @@ export const listObj = async () => {
 		include: ['customMetadata']
 	};
 	const ls = await r2.list(opt);
-	return ls.objects.map((a) => {
+	const list: FileMeta[] = [];
+	ls.objects.forEach((a) => {
+		if (!a.size) return;
 		const m = a.customMetadata || {};
-		return { ...m, key: a.key, size: a.size, updated: a.uploaded.getTime() } as FileMeta;
+		list.push({ ...m, key: a.key, size: a.size, updated: a.uploaded.getTime() } as FileMeta);
 	});
+	return list;
 };
 
 export const delObj = async (key: string) => {
