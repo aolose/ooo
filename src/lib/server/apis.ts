@@ -1,5 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit';
-import { bukCli, dbCli } from '$lib/server/setup';
+import { bukCli, dbCli, kvCli } from '$lib/server/setup';
 import { Customers } from '$lib/server/schema';
 import type { APIRoute } from '../../ambient';
 import { tableStr } from '$lib/server/utils';
@@ -53,6 +53,21 @@ export const Apis: APIRoute = {
 			if (r.error) {
 				// todo
 			} else return tableStr(r.results, keys);
+		}
+	},
+	kv: {
+		GET() {
+			return kvCli.list();
+		},
+		DELETE({ url }) {
+			const k = url.search.slice(1);
+			return kvCli.del(k);
+		},
+		async POST({ request }) {
+			const f = await request.formData();
+			const k = f.get('key') as string;
+			const v = f.get('value') as string;
+			if (k && v) await kvCli.set(k, v, 1);
 		}
 	}
 };

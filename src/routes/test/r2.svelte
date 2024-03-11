@@ -4,6 +4,7 @@
 	import type { FileMeta } from '../../ambient';
 	import { api } from '$lib/req';
 	import { fileSize } from '$lib/utils';
+	import Table from '$lib/components/table.svelte';
 
 	let ls: FileMeta[] = [];
 	const apiFile = api('files');
@@ -29,31 +30,17 @@
 		<input name="file" type="file" />
 		<input type="submit" value={$result.pending ? 'uploading' : 'upload'} />
 	</form>
-	<table>
-		<tbody>
-			{#each ls as item}
-				<tr>
-					<td><a href={`/res/${item.key}`}>{item.name}</a></td>
-					<td>{item.type}</td>
-					<td>{fileSize(item.size)}</td>
-					<td>{new Date(item.updated)}</td>
-					<td>
-						<button on:click={del(item.key)}>delete</button>
-					</td>
-				</tr>
-			{/each}
-		</tbody>
-	</table>
+	<Table>
+		{#each ls as item (item.key)}
+			<tr>
+				<td><a href={`/res/${item.key}`}>{item.name}</a></td>
+				<td>{item.type}</td>
+				<td>{fileSize(item.size)}</td>
+				<td>{new Date(item.updated)}</td>
+				<td>
+					<button on:click={del(item.key)}>delete</button>
+				</td>
+			</tr>
+		{/each}
+	</Table>
 </fieldset>
-
-<style lang="scss">
-	table {
-		width: 100%;
-		background: #fefefe;
-		border-collapse: collapse;
-
-		td {
-			border: 1px solid #eee;
-		}
-	}
-</style>

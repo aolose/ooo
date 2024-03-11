@@ -1,7 +1,12 @@
-import { dbCli } from '$lib/server/setup';
+import { dbCli, kvCli } from '$lib/server/setup';
 import { tables } from './tables';
+
 const schema: string[] = [];
+const version = '0.0';
+let curVersion = '';
 export const execSchema = async () => {
+	if (curVersion === version || (await kvCli.get('ver')) === version) return;
+	await kvCli.set('ver', (curVersion = version));
 	await Promise.all(schema.map((a) => dbCli.run(a)));
 };
 

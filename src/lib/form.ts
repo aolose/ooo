@@ -2,7 +2,7 @@ import { type Writable, writable } from 'svelte/store';
 import { api } from '$lib/req';
 import type { FetchResult } from '../ambient';
 
-export const submitHelper = (): [(e: Event) => void, Writable<FetchResult>] => {
+export const submitHelper = (after?: () => void): [(e: Event) => void, Writable<FetchResult>] => {
 	const o = {
 		pending: 0,
 		data: undefined,
@@ -26,7 +26,8 @@ export const submitHelper = (): [(e: Event) => void, Writable<FetchResult>] => {
 					})
 					.fail((reason) => {
 						result.set({ ...o, error: reason });
-					});
+					})
+					.finally(after);
 			}
 		},
 		result
