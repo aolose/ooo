@@ -33,7 +33,7 @@ export const get = async (key: string) => {
 	if (!kv) throw err;
 	const r = localCache.get(key);
 	if (r) {
-		if (r[1] && Date.now() < r[1]) return r[0];
+		if (!r[1] || Date.now() < r[1]) return r[0];
 		else {
 			del(key);
 		}
