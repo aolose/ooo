@@ -12,34 +12,34 @@ export const setKV = (k: KVNamespace) => {
 	kv = k;
 };
 
-export const set =  (k: string, v: string, expireMinutes = 0) => {
+export const set = (k: string, v: string, expireMinutes = 0) => {
 	if (!kv) throw err;
+	delCache.delete(k);
+	localCache.set(k, [v, expireMinutes ? Date.now() + expireMinutes * 6e4 : 0]);
 	let o: KVNamespacePutOptions | undefined;
 	if (expireMinutes) o = { expiration: Math.floor(Date.now() / 1000) + expireMinutes * 60 };
-	delCache.delete(k);
-	localCache.set(k, [v, Date.now() + expireMinutes * 6e4]);
 	// todo: if error happened
 	kv.put(k, v, o);
 };
 
-export const del =  (k: string) => {
+export const del = (k: string) => {
 	if (!kv) throw err;
 	delCache.add(k);
 	localCache.delete(k);
 	// todo: if error happened
 	kv.delete(k);
 };
-export const get = (key: string) => {
+export const get = async (key: string) => {
 	if (!kv) throw err;
 	const r = localCache.get(key);
 	if (r) {
-		if (Date.now() < r[1]) return r[0];
-		else{
-			del(key)
+		if (r[1] && Date.now() < r[1]) return r[0];
+		else {
+			del(key);
 		}
 		return null;
 	}
-	return kv.get(key);
+	return await kv.get(key);
 };
 export const list = async () => {
 	if (!kv) throw err;
@@ -49,9 +49,7 @@ export const list = async () => {
 	for (const [k] of localCache) ks.add(k);
 	const kk = [...ks].sort();
 	for (const o of kk) {
-		const v = localCache.get(o);
-		if (v && Date.now() > v[1]) d.push([o, v[0]]);
-		else d.push([o, await kv.get(o)]);
+		d.push([o, await get(o)]);
 	}
 	return d;
 };
