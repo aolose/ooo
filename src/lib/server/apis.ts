@@ -66,7 +66,7 @@ export const Apis: APIRoute = {
 		},
 		async POST({ request }) {
 			const [k, v] = decodeArray<[string, string]>(new Uint8Array(await request.arrayBuffer()));
-			if (k && v) await kvCli.set(k, v, 1);
+			if (k && v) await kvCli.set(k, v);
 		}
 	}
 };
