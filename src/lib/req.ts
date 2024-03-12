@@ -1,15 +1,18 @@
 import { type HttpMethod } from '@sveltejs/kit';
 import type { Apis } from '$lib/server/apis';
+import { decodeArray, encodeToArray } from '$lib/utils';
 
 export const api = (apiName: keyof typeof Apis) => {
 	const baseUrl = 'http://a/api/';
 	const controller = new AbortController();
 	const query =
 		(method: HttpMethod) =>
-		<T extends string | number | object | ArrayBuffer>(data?: BodyInit | null | undefined) => {
+		<T extends string | number | object | ArrayBuffer>(data?: unknown) => {
+			const headers = new Headers();
 			const opt: RequestInit = {
 				method,
-				signal: controller.signal
+				signal: controller.signal,
+				headers: headers
 			};
 			const url = new URL(baseUrl + apiName);
 			const tp = typeof data;
@@ -23,8 +26,11 @@ export const api = (apiName: keyof typeof Apis) => {
 						});
 				} else {
 					if (/Stream$|Buffer$|\dArray$|^String|^Number$|^FormData$/.test(data.constructor.name)) {
-						opt.body = data;
-					} else opt.body = JSON.stringify(data);
+						opt.body = data as BodyInit;
+					} else {
+						headers.set('Content-Type', 'application/octet-stream');
+						opt.body = Uint8Array.from(encodeToArray(data));
+					}
 				}
 			}
 
@@ -34,17 +40,10 @@ export const api = (apiName: keyof typeof Apis) => {
 				success?: successFn;
 				fail?: failFn;
 			};
-			const parseResult = async (r: Response): Promise<string | number | ArrayBuffer | object> => {
-				const d = r.headers.get('x-data-type');
-				switch (d) {
-					case 'num':
-						return +(await r.text());
-					case 'bin':
-						return await r.arrayBuffer();
-					case 'json':
-						return await r.json();
-				}
-				return await r.text();
+			const parseResult = async (r: Response) => {
+				if (r.headers.get('x-data-type') === 'bin') await r.arrayBuffer();
+				const bf = await r.arrayBuffer();
+				return decodeArray(new Uint8Array(bf));
 			};
 			const pms = fetch(url.toString().slice(8), opt)
 				.then(parseResult)

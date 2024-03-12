@@ -2,7 +2,8 @@ import type { RequestEvent } from '@sveltejs/kit';
 import { bukCli, dbCli, kvCli } from '$lib/server/setup';
 import { Customers } from '$lib/server/schema';
 import type { APIRoute } from '../../ambient';
-import { tableStr } from '$lib/server/utils';
+import { flatObj } from '$lib/server/utils';
+import { decodeArray } from '$lib/utils';
 
 export const Apis: APIRoute = {
 	test: {
@@ -52,7 +53,7 @@ export const Apis: APIRoute = {
 			const r = await Customers.all();
 			if (r.error) {
 				// todo
-			} else return tableStr(r.results, keys);
+			} else return flatObj(r.results, keys);
 		}
 	},
 	kv: {
@@ -64,9 +65,7 @@ export const Apis: APIRoute = {
 			return kvCli.del(k);
 		},
 		async POST({ request }) {
-			const f = await request.formData();
-			const k = f.get('key') as string;
-			const v = f.get('value') as string;
+			const [k, v] = decodeArray<[string, string]>(new Uint8Array(await request.arrayBuffer()));
 			if (k && v) await kvCli.set(k, v, 1);
 		}
 	}

@@ -11,7 +11,7 @@ export const apiHandler = async (event: RequestEvent) => {
 		const res = await method(event);
 		if (res instanceof Response) return res;
 		return resp(res);
-	}catch (e) {
-		 return error(500,`${e}`)
+	} catch (e) {
+		return error(500, `${e}`);
 	}
 };

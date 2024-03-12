@@ -38,7 +38,7 @@ type PlatformEnv = {
 
 type KVClient = {
 	get: (key: string) => Promise<string | null>;
-	set: (key: string, value: KVItem, expire? = 0) => Promise<void>;
+	set: (key: string, value: string, expire? = 0) => Promise<void>;
 	del: (key: string) => Promise<void>;
 	list: () => Promise<[string, string | null][]>;
 };
