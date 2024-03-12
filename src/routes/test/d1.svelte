@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { api } from '$lib/req';
 	import { onMount } from 'svelte';
-	import { toTable } from '$lib/utils';
+	import { groupArr } from '$lib/utils';
 	import Table from '$lib/components/table.svelte';
 
 	let list = [] as unknown[][];
 	const head = ['CustomerName', 'CompanyName', 'ContactName'];
 	const userApi = api('user');
 	const load = async () => {
-		const o = await userApi.get<string>(head.join());
-		list = toTable(3, o);
+		const o = await userApi.get<unknown[]>(head.join());
+		list = groupArr(3, o);
 	};
 	const add = async () => {
 		await userApi.put();

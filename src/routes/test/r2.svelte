@@ -31,6 +31,13 @@
 		<input type="submit" value={$result.pending ? 'uploading' : 'upload'} />
 	</form>
 	<Table>
+		<tr slot="thead">
+			<th>Filename</th>
+			<th>Type</th>
+			<th>size</th>
+			<th>Updated</th>
+			<th></th>
+		</tr>
 		{#each ls as item (item.key)}
 			<tr>
 				<td><a href={`/res/${item.key}`}>{item.name}</a></td>

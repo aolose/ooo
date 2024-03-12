@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Table from '$lib/components/table.svelte';
-	import { submitHelper } from '$lib/form';
 	import { api } from '$lib/req';
 	import { onMount } from 'svelte';
 
@@ -8,16 +7,19 @@
 	const load = async () => {
 		ls = await kv.get();
 	};
-
-	const [handler, result] = submitHelper(load);
 	let p = 0;
 	const kv = api('kv');
+	const submit = () => {
+		p = 1;
+		kv.post([key, value])
+			.then(load)
+			.finally(() => {
+				p = 0;
+			});
+	};
 	const del = (k: string) => () => {
 		kv.delete(k).then(load);
 	};
-	result.subscribe((o) => {
-		p = o.pending;
-	});
 	onMount(load);
 	let key = '',
 		value = '';
@@ -25,11 +27,11 @@
 
 <fieldset>
 	<legend>KV TEST</legend>
-	<form on:submit={handler} action="kv" method="post">
+	<div>
 		<label><span>key:</span><input bind:value={key} name="key" /></label>
 		<label><span>value:</span><input bind:value name="value" /></label>
-		<button type="submit">submit{p ? 'ing' : ''}</button>
-	</form>
+		<button on:click={submit}>submit{p ? 'ing' : ''}</button>
+	</div>
 	<Table>
 		<tr slot="thead">
 			<th>Key</th>
