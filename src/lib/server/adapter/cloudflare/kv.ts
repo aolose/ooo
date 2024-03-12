@@ -12,27 +12,31 @@ export const setKV = (k: KVNamespace) => {
 	kv = k;
 };
 
-export const set = async (k: string, v: string, expireMinutes = 0) => {
+export const set =  (k: string, v: string, expireMinutes = 0) => {
 	if (!kv) throw err;
 	let o: KVNamespacePutOptions | undefined;
 	if (expireMinutes) o = { expiration: Math.floor(Date.now() / 1000) + expireMinutes * 60 };
-	await kv.put(k, v, o);
 	delCache.delete(k);
 	localCache.set(k, [v, Date.now() + expireMinutes * 6e4]);
+	// todo: if error happened
+	kv.put(k, v, o);
 };
 
-export const del = async (k: string) => {
+export const del =  (k: string) => {
 	if (!kv) throw err;
-	await kv.delete(k);
 	delCache.add(k);
 	localCache.delete(k);
+	// todo: if error happened
+	kv.delete(k);
 };
 export const get = (key: string) => {
 	if (!kv) throw err;
 	const r = localCache.get(key);
 	if (r) {
 		if (Date.now() < r[1]) return r[0];
-		else localCache.delete(key);
+		else{
+			del(key)
+		}
 		return null;
 	}
 	return kv.get(key);
