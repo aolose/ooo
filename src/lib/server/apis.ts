@@ -3,7 +3,7 @@ import { bukCli, dbCli, kvCli } from '$lib/server/setup';
 import { Customers } from '$lib/server/schema';
 import type { APIRoute } from '../../ambient';
 import { flatObj } from '$lib/server/utils';
-import { decodeArray } from '$lib/utils';
+import { parseArray } from '$lib/utils';
 
 export const Apis: APIRoute = {
 	test: {
@@ -65,7 +65,7 @@ export const Apis: APIRoute = {
 			return kvCli.del(k);
 		},
 		async POST({ request }) {
-			const [k, v] = decodeArray<[string, string]>(new Uint8Array(await request.arrayBuffer()));
+			const [k, v] = parseArray<[string, string]>(new Uint8Array(await request.arrayBuffer()));
 			if (k && v) await kvCli.set(k, v);
 		}
 	}

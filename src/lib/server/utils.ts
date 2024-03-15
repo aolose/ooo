@@ -1,4 +1,4 @@
-import { encodeToArray } from '$lib/utils';
+import { arrayify } from '$lib/utils';
 
 export const bufHash = async (buf: ArrayBuffer) => {
 	const hashBuf = await crypto.subtle.digest('SHA-1', buf);
@@ -22,9 +22,9 @@ export const resp = (
 	if (data) {
 		const type = data.constructor.name;
 		if (/Stream$|Buffer$|\dArray$/.test(type)) {
-			headers1.set('x-data-type', 'bin');
+			headers1.set('content-type', 'application/octet-stream');
 		} else {
-			data = Uint8Array.from(encodeToArray(data));
+			data = Uint8Array.from(arrayify(data));
 		}
 	}
 	return new Response(data as BodyInit, {

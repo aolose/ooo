@@ -1,6 +1,6 @@
 import { type HttpMethod } from '@sveltejs/kit';
 import type { Apis } from '$lib/server/apis';
-import { decodeArray, encodeToArray } from '$lib/utils';
+import { parseArray, arrayify } from '$lib/utils';
 
 export const api = (apiName: keyof typeof Apis) => {
 	const baseUrl = 'http://a/api/';
@@ -29,7 +29,7 @@ export const api = (apiName: keyof typeof Apis) => {
 						opt.body = data as BodyInit;
 					} else {
 						headers.set('Content-Type', 'application/octet-stream');
-						opt.body = Uint8Array.from(encodeToArray(data));
+						opt.body = Uint8Array.from(arrayify(data));
 					}
 				}
 			}
@@ -41,9 +41,9 @@ export const api = (apiName: keyof typeof Apis) => {
 				fail?: failFn;
 			};
 			const parseResult = async (r: Response) => {
-				if (r.headers.get('x-data-type') === 'bin') await r.arrayBuffer();
+				if (r.headers.get('content-type') === 'application/octet-stream') await r.arrayBuffer();
 				const bf = await r.arrayBuffer();
-				return decodeArray(new Uint8Array(bf));
+				return parseArray(new Uint8Array(bf));
 			};
 			const pms = fetch(url.toString().slice(8), opt)
 				.then(parseResult)
