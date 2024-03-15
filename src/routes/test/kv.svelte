@@ -30,7 +30,8 @@
 	<div>
 		<label><span>key:</span><input bind:value={key} name="key" /></label>
 		<label><span>value:</span><input bind:value name="value" /></label>
-		<button on:click={submit}>submit{p ? 'ing' : ''}</button>
+		<button on:click={submit}>Submit{p ? 'ing' : ''}</button>
+		<button on:click={load}>Load</button>
 	</div>
 	<Table>
 		<tr slot="thead">
