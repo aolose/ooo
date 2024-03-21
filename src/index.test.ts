@@ -7,7 +7,7 @@ describe('test jsonEnc and jsonDec', () => {
 		expect(parseArray(arrayify(a))).toEqual(a);
 	});
 	it('Number', () => {
-		const a = 100;
+		const a = -1234.111;
 		expect(parseArray(arrayify(a))).toEqual(a);
 	});
 	it('null', () => {
@@ -15,7 +15,7 @@ describe('test jsonEnc and jsonDec', () => {
 		expect(parseArray(arrayify(a))).toEqual(a);
 	});
 	it('Array', () => {
-		const a = [1, '2', [], [], 1, [], [], [], {}];
+		const a = [-1.111, 2, [], [], 1, [], [], []];
 		expect(parseArray(arrayify(a))).toEqual(a);
 	});
 	it('Array', () => {

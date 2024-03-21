@@ -3,12 +3,12 @@
 	import D1 from './d1.svelte';
 	import KV from './kv.svelte';
 	import { onMount } from 'svelte';
-  import {arrayify} from '$lib/utils-wasm'
+	import init, { is_object } from '$lib/utils-wasm/pkg';
 
-	onMount(async ()=>{
-		await arrayify({})
-		console.log({arrayify})
-	})
+	onMount(async () => {
+		await init();
+		is_object({});
+	});
 
 </script>
 

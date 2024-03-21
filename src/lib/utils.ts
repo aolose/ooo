@@ -8,27 +8,45 @@ export function fileSize(size = 0) {
 	return size.toFixed(1) + m[n];
 }
 
-const num2Arr = (n: number) => {
+const num2Arr = (n: number): number[] => {
 	let ng = 0;
 	if (n < 0) {
 		ng = 1;
 		n = -n;
 	}
-	const a = [];
-	while (n > 0xff) {
-		a.push(n & 0xff);
-		n = n >> 8;
+	const f = n % 1;
+	let decimal: number[] | undefined;
+	if (f) {
+		decimal = num2Arr(parseInt(n.toString().split('.')[1]));
+		n = n << 0;
 	}
-	if (n) a.push(n);
-	if (ng) a.push(0);
+	let a = [];
+	while (n > 0xfe) {
+		const r = n & 0xff;
+		a.push((r & 0xfe) + 1); // 2~255
+		n = n >> 8;
+		if (r === 0xff) n++;
+	}
+	if (n) a.push(n + 1);
+	if (decimal) a = a.concat(1, decimal);
+	if (ng) a.push(1);
 	return a;
 };
 
-const arr2Num = (bv: number[] | Uint8Array) => {
-	return (bv as number[]).reduce((a, b, c) => {
-		if (!b) return -a;
-		return a + (b << (8 * c));
-	}, 0);
+const arr2Num = (bv: number[] | Uint8Array): number => {
+	const e = bv.length;
+	let sum = 0;
+	let i = 0;
+	for (; i < e; i++) {
+		const b = bv[i];
+		if (b === 1) break;
+		sum += (b - 1) << (8 * i);
+	}
+	if (i === e) return sum;
+	if (i === e - 1) return -sum;
+	const decimal = arr2Num(bv.slice(i + 1));
+	if (decimal < 0) sum = -sum;
+	return sum + decimal / Math.pow(10, ~~(Math.log10(Math.abs(decimal))) + 1);
 };
 
 const str2Arr = (s: string) => {
@@ -161,7 +179,6 @@ export const parseArray: typeof ParseArray = <T>(
 		const s = type ? index : index + 1;
 		let i = s;
 		while (arr[i]) i++;
-		if (!arr[i + 1]) i++;
 		const n = arr2Num(arr.slice(s, i));
 		if (parent) {
 			attachToParent(n);
