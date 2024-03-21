@@ -1,5 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit';
-import { bukCli, dbCli, kvCli } from '$lib/server/setup';
+import { bukCli, kvCli } from '$lib/server/setup';
 import { Customers } from '$lib/server/schema';
 import type { APIRoute } from '../../ambient';
 import { flatObj } from '$lib/server/utils';
@@ -27,7 +27,7 @@ export const Apis: APIRoute = {
 	},
 	users: {
 		async GET() {
-			return await dbCli.all`select * from Customers`;
+			return await Customers.all();
 		}
 	},
 	user: {
