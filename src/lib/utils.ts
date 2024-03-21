@@ -261,3 +261,31 @@ export const parseArray: typeof ParseArray = <T>(
 		return a;
 	}
 };
+
+const readStream = async (r:CompressionStream|DecompressionStream)=>{
+	let arr:number[]=[]
+	const reader = r.readable.getReader()
+	for (;;){
+		const  {done,value}=await reader.read()
+		console.log(value)
+		if(done)break
+		arr=arr.concat(Array.from(value))
+	}
+	return arr
+}
+
+export const gzip = async (arr: number[]) => {
+	const ds = new CompressionStream('gzip');
+	const writer = ds.writable.getWriter();
+	await writer.write(String.fromCharCode(...arr));
+	await writer.close();
+	return await readStream(ds)
+};
+
+export const ugzip = async <T>(body:ReadableStream<Uint8Array>|null)=>{
+	if(!body)return
+	const ds = new DecompressionStream('gzip')
+	body.pipeThrough(ds)
+  const r = ds.readable.getReader()
+	return parseArray<T>(await readStream(ds))
+}
