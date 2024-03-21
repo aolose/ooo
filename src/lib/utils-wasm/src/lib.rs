@@ -3,11 +3,11 @@ use js_sys::{Object};
 
 #[wasm_bindgen]
 extern "C" {
-    fn alert(s: &str);
+    fn console(s: &str);
 }
 
 
 #[wasm_bindgen]
 pub fn is_object(o: Object) {
-  alert(&format!("Hello, {}!", o.is_object()));
+    console(&format!("Hello, {}!", o.is_object()));
 }

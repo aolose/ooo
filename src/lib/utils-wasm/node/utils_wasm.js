@@ -62,8 +62,8 @@ module.exports.__wbindgen_is_object = function(arg0) {
     return ret;
 };
 
-module.exports.__wbg_alert_57543f9f75ee07ac = function(arg0, arg1) {
-    alert(getStringFromWasm0(arg0, arg1));
+module.exports.__wbg_console_9a50f7a02dc01655 = function(arg0, arg1) {
+    console(getStringFromWasm0(arg0, arg1));
 };
 
 module.exports.__wbindgen_object_drop_ref = function(arg0) {
