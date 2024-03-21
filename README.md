@@ -1,19 +1,31 @@
-# infrastructure
+# Proving ground
+Just trying something
+
+
+## tasks
 
 - [x] Local Cloudflare Workers development
-- [x] configure Miniflare
+  - use wrangler for e2e test
+  - use miniflare for development
 - [x] Integrate Cloudflare KV
 - [x] Integrate Cloudflare R2
 - [x] Integrate Cloudflare D1
-- [ ] test
+- [x] test
 - [x] Abstract storage interface
+  - Just in case one day I don't want to use cloudflare
 - [ ] Add Storybook
-  - [ ] configure
-  - [ ] write demo
-- [ ] Auth
+- [ ] Auth js
 - [ ] Api
+- [x] serialization
+  - like JSON.stringify and parse
+  - low performance but small size ( Can I use wasm to speed up?) 
+- [x] Wasm
+  - just try rust hello world
+- [ ] Diff patch request
+- [ ] Encrypt and decrypt request
+- [ ] Cache manage 
 
-# Features
+## Modules
 
 - [ ] Editor
 - [ ] Article

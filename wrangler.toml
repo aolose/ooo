@@ -1,3 +1,17 @@
+compatibility_date = "2022-04-05"
+workers_dev = true
+main = ".svelte-kit/cloudflare/_worker.js"
+compatibility_flags = ["nodejs_compat"]
+kv_namespaces = [
+    { binding = "KV", id = "ooo" }
+]
+
 [[r2_buckets]]
-binding = 'MY_BUCKET' # <~ valid JavaScript variable name
+binding = 'MY_BUCKET'
 bucket_name = 'ooo'
+
+[[d1_databases]]
+binding = "D1"
+database_name = "ooo"
+database_id = "b1297ba8-5733-47ed-aa89-9a2f4c4a310d"
+

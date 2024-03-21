@@ -10,3 +10,5 @@ vite.config.ts.timestamp-*
 /.idea
 /.fleet
 /.wrangler
+/src/lib/utils-wasm/target/
+/src/lib/utils-wasm/Cargo.lock
