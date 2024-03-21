@@ -1,13 +1,10 @@
 use wasm_bindgen::prelude::*;
-use js_sys::{Object};
-
-#[wasm_bindgen]
-extern "C" {
-    fn alert(s: &str);
-}
-
+use js_sys::{Array, Object};
 
 #[wasm_bindgen]
 pub fn is_object(o: Object) {
-  alert(&format!("Hello, {}!", o.is_object()));
+    use web_sys::console;
+    let a = Array::new();
+    a.push(&format!("is_object: {}", o.is_object()).into());
+    console::log(&a);
 }

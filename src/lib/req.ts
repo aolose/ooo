@@ -41,7 +41,8 @@ export const api = (apiName: keyof typeof Apis) => {
 				fail?: failFn;
 			};
 			const parseResult = async (r: Response) => {
-				if (r.headers.get('content-type') === 'application/octet-stream') await r.arrayBuffer();
+				const hd = r.headers
+				if (hd.get('content-type') === 'application/octet-stream') await r.arrayBuffer();
 				const bf = await r.arrayBuffer();
 				return parseArray(new Uint8Array(bf));
 			};
