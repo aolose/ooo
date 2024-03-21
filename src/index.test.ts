@@ -29,7 +29,7 @@ describe('test jsonEnc and jsonDec', () => {
 		expect(parseArray(arrayify([]))).toEqual([]);
 	});
 	it('Object', () => {
-		const a = { c: [], e: 1 };
+		const a = { c: [{}], g: 'sdasda2', s: { d: { 3: [1, 2, 3, 4] }, r: null }, e: 1 };
 		expect(parseArray(arrayify(a))).toEqual(a);
 	});
 	it('Empty Object', () => {
