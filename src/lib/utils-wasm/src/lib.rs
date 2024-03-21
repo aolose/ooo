@@ -1,5 +1,5 @@
 use wasm_bindgen::prelude::*;
-use js_sys::{Array, Object};
+use js_sys::{Object};
 
 #[wasm_bindgen]
 extern "C" {
@@ -8,6 +8,6 @@ extern "C" {
 
 
 #[wasm_bindgen]
-pub fn arrayify(o: Object) {
+pub fn is_object(o: Object) {
   alert(&format!("Hello, {}!", o.is_object()));
 }
