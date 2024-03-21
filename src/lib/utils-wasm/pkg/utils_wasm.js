@@ -49,8 +49,8 @@ function addHeapObject(obj) {
 /**
 * @param {object} o
 */
-export function arrayify(o) {
-    wasm.arrayify(addHeapObject(o));
+export function is_object(o) {
+    wasm.is_object(addHeapObject(o));
 }
 
 async function __wbg_load(module, imports) {

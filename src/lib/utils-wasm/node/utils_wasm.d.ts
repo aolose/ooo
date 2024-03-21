@@ -3,4 +3,4 @@
 /**
 * @param {object} o
 */
-export function arrayify(o: object): void;
+export function is_object(o: object): void;

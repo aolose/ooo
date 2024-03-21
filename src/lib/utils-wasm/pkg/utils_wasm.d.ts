@@ -3,13 +3,13 @@
 /**
 * @param {object} o
 */
-export function arrayify(o: object): void;
+export function is_object(o: object): void;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
-  readonly arrayify: (a: number) => void;
+  readonly is_object: (a: number) => void;
 }
 
 export type SyncInitInput = BufferSource | WebAssembly.Module;

@@ -52,8 +52,8 @@ function addHeapObject(obj) {
 /**
 * @param {object} o
 */
-module.exports.arrayify = function(o) {
-    wasm.arrayify(addHeapObject(o));
+module.exports.is_object = function(o) {
+    wasm.is_object(addHeapObject(o));
 };
 
 module.exports.__wbindgen_is_object = function(arg0) {
