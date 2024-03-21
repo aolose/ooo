@@ -11,9 +11,6 @@ dependencies:
   cookie:
     specifier: ^0.6.0
     version: 0.6.0
-  utils-wasm:
-    specifier: file:./wasm/utils-wasm
-    version: file:wasm/utils-wasm
 
 devDependencies:
   '@cloudflare/workers-types':
@@ -3060,8 +3057,3 @@ packages:
   /zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: true
-
-  file:wasm/utils-wasm:
-    resolution: {directory: wasm/utils-wasm, type: directory}
-    name: utils-wasm
-    dev: false
