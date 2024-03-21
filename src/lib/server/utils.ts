@@ -28,7 +28,7 @@ export const resp =async (
 		if (/Stream$|Buffer$|\dArray$/.test(type)) {
 			headers1.set('content-type', 'application/octet-stream');
 		} else {
-			let arr = arrayify(data);
+			let arr:Uint8Array|number[] = arrayify(data);
 			if (arr.length > 100) {
 				arr=await gzip(arr)
 				headers1.set('content-encoding','gzip')

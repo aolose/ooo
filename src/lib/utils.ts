@@ -263,14 +263,20 @@ export const parseArray: typeof ParseArray = <T>(
 };
 
 const readStream = async (r:CompressionStream|DecompressionStream)=>{
-	let arr:number[]=[]
+	const chunks:Uint8Array[]=[]
+	const sizes:number[]=[0]
+	let size = 0
 	const reader = r.readable.getReader()
 	for (;;){
 		const  {done,value}=await reader.read()
-		console.log(value)
 		if(done)break
-		arr=arr.concat(Array.from(value))
+		size+=value.length
+		sizes.push(size)
+		chunks.push(value)
 	}
+	const arr = new Uint8Array(size)
+	for (let i=0,l=chunks.length;i<l;i++)
+		arr.set(chunks[i],sizes[i])
 	return arr
 }
 
