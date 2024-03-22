@@ -9,7 +9,6 @@
 		await init();
 		is_object({});
 	});
-
 </script>
 
 <R2 />

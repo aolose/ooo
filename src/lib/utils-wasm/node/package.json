@@ -1,11 +1,11 @@
 {
-  "name": "utils-wasm",
-  "version": "0.1.0",
-  "files": [
-    "utils_wasm_bg.wasm",
-    "utils_wasm.js",
-    "utils_wasm.d.ts"
-  ],
-  "main": "utils_wasm.js",
-  "types": "utils_wasm.d.ts"
+	"name": "utils-wasm",
+	"version": "0.1.0",
+	"files": [
+		"utils_wasm_bg.wasm",
+		"utils_wasm.js",
+		"utils_wasm.d.ts"
+	],
+	"main": "utils_wasm.js",
+	"types": "utils_wasm.d.ts"
 }

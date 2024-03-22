@@ -5,7 +5,7 @@ export const bufHash = async (buf: ArrayBuffer) => {
 	return Array.from(new Uint32Array(hashBuf), (a) => a.toString(36)).join('');
 };
 
-export const resp =async (
+export const resp = async (
 	data: unknown,
 	status = 200,
 	headers?: Headers | object | Map<string, string>
@@ -28,11 +28,10 @@ export const resp =async (
 		if (/Stream$|Buffer$|\dArray$/.test(type)) {
 			headers1.set('content-type', 'application/octet-stream');
 		} else {
-			let arr:Uint8Array|number[] = arrayify(data);
+			const arr: Uint8Array | number[] = arrayify(data);
 			if (arr.length > 100) {
-				arr=await gzip(arr)
-				headers1.set('content-encoding','gzip')
-				headers1.set('content-length',arr.length.toString())
+				headers1.set('content-type', 'application/gzip');
+				return new Response(await gzip(arr),opt)
 			}
 			data = Uint8Array.from(arr);
 		}

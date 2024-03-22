@@ -1,7 +1,7 @@
 import { it, expect, describe } from 'vitest';
 import { parseArray, arrayify, compressArray } from '$lib/utils';
 
-const json = (a:unknown)=>JSON.parse(JSON.stringify(a))
+const json = (a: unknown) => JSON.parse(JSON.stringify(a));
 
 describe('test jsonEnc and jsonDec', () => {
 	it('String', () => {
@@ -16,8 +16,13 @@ describe('test jsonEnc and jsonDec', () => {
 		const a = null;
 		expect(parseArray(arrayify(a))).toEqual(json(a));
 	});
-	it('Array', () => {
+	it('Array empty', () => {
 		const a = [,];
+		expect(parseArray(arrayify(a))).toEqual(json(a));
+	});
+	it('Array string', () => {
+		const a = [[null], '1'];
+		console.log(arrayify(a));
 		expect(parseArray(arrayify(a))).toEqual(json(a));
 	});
 	it('Array', () => {
@@ -32,7 +37,6 @@ describe('test jsonEnc and jsonDec', () => {
 	});
 	it('Object', async () => {
 		const a = { c: [{}], g: 'sdasda2', s: { d: { 3: [1, 2, 3, 4] }, r: null }, e: 1 };
-		const b = arrayify(a)
 		expect(parseArray(arrayify(a))).toEqual(json(a));
 	});
 	it('Empty Object', () => {
