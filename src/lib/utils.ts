@@ -296,7 +296,7 @@ const readStream = async (r: CompressionStream | DecompressionStream) => {
 export const gzip = async (arr: number[]) => {
 	const ds = new CompressionStream('gzip');
 	const writer = ds.writable.getWriter();
-	await writer.write(String.fromCharCode(...arr));
+	await writer.write(Uint8Array.from(arr));
 	await writer.close();
 	return ds.readable;
 };
