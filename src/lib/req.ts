@@ -1,6 +1,6 @@
 import { type HttpMethod } from '@sveltejs/kit';
 import type { Apis } from '$lib/server/apis';
-import { parseArray, arrayify } from '$lib/utils';
+import { parseArray, arrayify, ugzip } from '$lib/utils';
 
 export const api = (apiName: keyof typeof Apis) => {
 	const baseUrl = 'http://a/api/';
@@ -41,10 +41,13 @@ export const api = (apiName: keyof typeof Apis) => {
 				fail?: failFn;
 			};
 			const parseResult = async (r: Response) => {
-				const hd = r.headers
-				if (hd.get('content-type') === 'application/octet-stream') await r.arrayBuffer();
+				const hd = r.headers;
+				const contentType = hd.get('content-type');
+				if (contentType === 'application/octet-stream') return await r.arrayBuffer();
+				else if (contentType === 'application/gzip') return await ugzip(r.body);
 				const bf = await r.arrayBuffer();
-				return parseArray(new Uint8Array(bf));
+				const rr = parseArray(new Uint8Array(bf));
+				return rr;
 			};
 			const pms = fetch(url.toString().slice(8), opt)
 				.then(parseResult)

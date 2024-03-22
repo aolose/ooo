@@ -57,8 +57,10 @@ export const Apis: APIRoute = {
 		}
 	},
 	kv: {
-		GET() {
-			return kvCli.list();
+		async GET() {
+			const ls = await kvCli.list();
+			console.log(ls);
+			return ls;
 		},
 		DELETE({ url }) {
 			const k = url.search.slice(1);

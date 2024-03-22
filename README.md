@@ -1,6 +1,6 @@
 # Proving ground
-Just trying something
 
+Just trying something
 
 ## tasks
 
@@ -18,12 +18,12 @@ Just trying something
 - [ ] Api
 - [x] serialization
   - like JSON.stringify and parse
-  - low performance but small size ( Can I use wasm to speed up?) 
+  - low performance but small size ( Can I use wasm to speed up?)
 - [x] Wasm
   - just try rust hello world
 - [ ] Diff patch request
 - [ ] Encrypt and decrypt request
-- [ ] Cache manage 
+- [ ] Cache manage
 
 ## Modules
 
