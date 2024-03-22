@@ -10,7 +10,7 @@ export const apiHandler = async (event: RequestEvent) => {
 	try {
 		const res = await method(event);
 		if (res instanceof Response) return res;
-		return resp(res);
+		return await resp(res);
 	} catch (e) {
 		return error(500, `${e}`);
 	}
