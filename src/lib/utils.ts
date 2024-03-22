@@ -22,14 +22,14 @@ const num2Arr = (n: number): number[] => {
 	}
 	let a = [];
 	while (n > 0xfe) {
-		const r = n & 0xff;
-		a.push((r & 0xfe) + 1); // 2~255
-		n = n >> 8;
-		if (r === 0xff) n++;
+		const r = n % 0xfe;
+		n = (n-r)/0xfe;
+		a.push(r+2); // 2~255
 	}
-	if (n) a.push(n + 1);
+	if (n)a.push(n + 2);
 	if (decimal) a = a.concat(1, decimal);
 	if (ng) a.push(1);
+	//1 8e 64 59 7f 69
 	return a;
 };
 
@@ -41,7 +41,7 @@ const arr2Num = (bv: number[] | Uint8Array): number => {
 	for (; i < e; i++) {
 		const b = bv[i];
 		if (b === 1) break;
-		sum += (b - 1) << (8 * i);
+		sum += (b - 2)*Math.pow(0xfe,i);
 	}
 	if (i === e) return sum;
 	if (i === e - 1) return -sum;
@@ -105,7 +105,7 @@ export const arrayify = (o: Data): ArrayIfyResult => {
 			if (type === Types.Object || type === Types.Array) {
 				const lt = v[end];
 				if (lt === undefined || lt === Types.String) vs.push(0);
-			} else if (type === Types.String) vs.push(0);
+			}
 		};
 
 		if (Array.isArray(o)) {
@@ -127,6 +127,7 @@ export const arrayify = (o: Data): ArrayIfyResult => {
 				} else {
 					ks.push(type);
 					setVs(v);
+					if (type === Types.String) vs.push(0);
 				}
 			}
 		} else {
@@ -141,6 +142,7 @@ export const arrayify = (o: Data): ArrayIfyResult => {
 				const z = e.slice(1);
 				vs = vs.concat(z);
 				setVs(e);
+				if (type === Types.String || type=== Types.Number) vs.push(0);
 			}
 		}
 		n = ks.length ? ks.concat(0).concat(vs.slice(0, last)) : [];
