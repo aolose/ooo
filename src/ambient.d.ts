@@ -1,5 +1,5 @@
 import { HttpMethod, RequestEvent } from '@sveltejs/kit';
-import { D1Database, R2Bucket, KVNamespace, ReadableStream } from '@cloudflare/workers-types';
+import { D1Database, R2Bucket, KVNamespace } from '@cloudflare/workers-types';
 
 type KVItem = string | ArrayBuffer | ArrayBufferView | ReadableStream;
 type sqlTemplateTag = <T>(
@@ -51,7 +51,11 @@ type DBClient = {
 
 type BucketClient = {
 	get: (key: string) => Promise<Response>;
-	put: (file: File) => Promise<string | undefined>;
+	put: (
+		data: ReadableStream<Uint8Array> | ArrayBuffer | Blob | File,
+		name?: string | null,
+		type?: string | null
+	) => Promise<string | undefined>;
 	del: (key: string) => Promise<undefined>;
 	list: () => Promise<FileMeta[]>;
 };

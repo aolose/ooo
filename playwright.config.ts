@@ -5,7 +5,7 @@ const config: PlaywrightTestConfig = {
 		command: 'npm run build && wrangler dev --port 4173',
 		port: 4173
 	},
-	testDir: 'e2e',
+	testDir: 'test/e2e',
 	testMatch: /(.+\.)?(test|spec)\.[jt]s/
 };
 

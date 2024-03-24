@@ -1,11 +1,16 @@
 import { it, expect, describe } from 'vitest';
-import { parseArray, arrayify } from '$lib/utils';
+import { parseArray, arrayify } from '../../src/lib/utils';
 
 const json = (a: unknown) => JSON.parse(JSON.stringify(a));
 
 describe('test jsonEnc and jsonDec', () => {
 	it('String', () => {
 		const a = 'abc';
+		expect(parseArray(arrayify(a))).toEqual(json(a));
+	});
+
+	it('String empty', () => {
+		const a = '';
 		expect(parseArray(arrayify(a))).toEqual(json(a));
 	});
 
@@ -30,7 +35,7 @@ describe('test jsonEnc and jsonDec', () => {
 	});
 
 	it('Array empty', () => {
-		const a:unknown[] = [];
+		const a: unknown[] = [];
 		expect(parseArray(arrayify(a))).toEqual(json(a));
 	});
 
@@ -44,8 +49,18 @@ describe('test jsonEnc and jsonDec', () => {
 		expect(parseArray(arrayify(a))).toEqual(json(a));
 	});
 
+	it('Array 1', () => {
+		const a = [{ a: 1, c: 2 }, { b: 2 }];
+		expect(parseArray(arrayify(a))).toEqual(json(a));
+	});
+
+	it('Array 3', () => {
+		const a = ['', '2'];
+		expect(parseArray(arrayify(a))).toEqual(json(a));
+	});
+
 	it('Array 2', async () => {
-		const a=[294577,1711080570729]
+		const a = [294577, 1711080570729];
 		expect(parseArray(arrayify(a))).toEqual(json(a));
 	});
 
@@ -63,10 +78,21 @@ describe('test jsonEnc and jsonDec', () => {
 	});
 
 	it('Object 2', async () => {
-    const a = {
-			b: 1,
+		const a = {
+			name: 'bg3_test.png',
+			type: 'image/png',
+			key: '2hiy5k16itiew9laxrfuxx75trwnwfb',
+			size: 404628,
+			updated: 1711264117438
+		};
+		expect(parseArray(arrayify(a))).toEqual(json(a));
+	});
+
+	it('Object 3', async () => {
+		const a = {
+			b: '',
 			c: 2
-		}
+		};
 		expect(parseArray(arrayify(a))).toEqual(json(a));
 	});
 
