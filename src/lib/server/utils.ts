@@ -31,7 +31,7 @@ export const resp = async (
 			const arr: Uint8Array | number[] = arrayify(data);
 			if (arr.length > 100) {
 				headers1.set('content-type', 'application/gzip');
-				return new Response(await gzip(arr),opt)
+				return new Response(await gzip(arr), opt);
 			}
 			data = Uint8Array.from(arr);
 		}

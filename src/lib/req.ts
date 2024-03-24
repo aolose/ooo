@@ -1,6 +1,6 @@
 import { type HttpMethod } from '@sveltejs/kit';
 import type { Apis } from '$lib/server/apis';
-import { parseArray, arrayify, ugzip } from '$lib/utils';
+import { arrayify, parseArray, ugzip } from '$lib/utils';
 
 export const api = (apiName: keyof typeof Apis) => {
 	const baseUrl = 'http://a/api/';
@@ -9,10 +9,16 @@ export const api = (apiName: keyof typeof Apis) => {
 		(method: HttpMethod) =>
 		<T extends string | number | object | ArrayBuffer>(data?: unknown) => {
 			const headers = new Headers();
-			const opt: RequestInit = {
+			headers.set('Content-Type', 'application/octet-stream');
+			/**
+			 *  fetch duplex
+			 *  @see {@link https://fetch.spec.whatwg.org/#dom-requestinit-duplex}
+			 *  */
+			const opt: RequestInit & { duplex: 'half' | 'full' } = {
 				method,
 				signal: controller.signal,
-				headers: headers
+				headers: headers,
+				duplex: 'half'
 			};
 			const url = new URL(baseUrl + apiName);
 			const tp = typeof data;
@@ -28,7 +34,6 @@ export const api = (apiName: keyof typeof Apis) => {
 					if (/Stream$|Buffer$|\dArray$|^String|^Number$|^FormData$/.test(data.constructor.name)) {
 						opt.body = data as BodyInit;
 					} else {
-						headers.set('Content-Type', 'application/octet-stream');
 						opt.body = Uint8Array.from(arrayify(data));
 					}
 				}
@@ -40,41 +45,55 @@ export const api = (apiName: keyof typeof Apis) => {
 				success?: successFn;
 				fail?: failFn;
 			};
+
 			const parseResult = async (r: Response) => {
 				const hd = r.headers;
 				const contentType = hd.get('content-type');
 				if (contentType === 'application/octet-stream') return await r.arrayBuffer();
 				else if (contentType === 'application/gzip') return await ugzip(r.body);
 				const bf = await r.arrayBuffer();
-				const rr = parseArray(new Uint8Array(bf));
-				return rr;
+				return parseArray(new Uint8Array(bf));
 			};
-			const pms = fetch(url.toString().slice(8), opt)
-				.then(parseResult)
-				.then((data) => {
-					if (pmsConnector.success) pmsConnector.success(data as T);
-					return data as T;
-				})
-				.catch((reason) => {
-					if (pmsConnector.fail) pmsConnector.fail(reason);
-					console.error(reason);
-				}) as Promise<T> & {
+
+			const pms = Promise.resolve().then(() => {
+				return fetch(url.toString().slice(8), opt)
+					.then(parseResult)
+					.then((data) => {
+						if (pmsConnector.success) pmsConnector.success(data as T);
+						return data as T;
+					})
+					.catch((reason) => {
+						if (pmsConnector.fail) pmsConnector.fail(reason);
+						console.error(reason);
+					});
+			}) as Promise<T> & {
+				withHeaders: (headers: { [key: string]: string }) => typeof pms;
 				abort: () => void;
 				success: (fn: successFn) => typeof pms;
 				fail: (fn: failFn) => typeof pms;
 			};
 
+			pms.withHeaders = (h) => {
+				for (const [k, v] of Object.entries(h)) {
+					headers.set(k, v);
+				}
+				return pms;
+			};
+
 			pms.abort = () => {
 				controller.abort();
 			};
+
 			pms.success = (fn) => {
 				pmsConnector.success = fn;
 				return pms;
 			};
+
 			pms.fail = (fn) => {
 				pmsConnector.fail = fn;
 				return pms;
 			};
+
 			return pms;
 		};
 	return {

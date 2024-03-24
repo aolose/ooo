@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { submitHelper } from '$lib/form';
 	import { onMount } from 'svelte';
 	import type { FileMeta } from '../../ambient';
 	import { api } from '$lib/req';
 	import { fileSize } from '$lib/utils';
+	import { uploader } from '$lib/upload';
 	import Table from '$lib/components/table.svelte';
 
 	let ls: FileMeta[] = [];
@@ -17,19 +17,24 @@
 		});
 	};
 	onMount(loadLs);
-	const [handler, result] = submitHelper();
-	result.subscribe((a) => {
-		if (!a.pending && (a.data || a.error)) loadLs();
-	});
+	let file: HTMLInputElement;
+	let pending = false;
+
+	function up() {
+		uploader(file.files?.[0])?.progress((info) => {
+			pending = info.uploading;
+			console.log('uploaded:', Math.floor((info.uploaded * 100) / info.total), '%');
+			if (!pending) loadLs();
+		});
+		file.value = '';
+	}
 </script>
 
 <fieldset>
 	<legend>R2 TEST</legend>
-	<form on:submit={handler} method="post" action="files">
-		<button on:click={loadLs}>load files</button>
-		<input name="file" type="file" />
-		<input type="submit" value={$result.pending ? 'uploading' : 'upload'} />
-	</form>
+	<button on:click={loadLs}>load files</button>
+	<input bind:this={file} name="file" type="file" />
+	<button on:click={up}>{pending ? 'uploading' : 'upload'}</button>
 	<Table>
 		<tr slot="thead">
 			<th>Filename</th>

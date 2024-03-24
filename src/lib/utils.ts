@@ -23,10 +23,10 @@ const num2Arr = (n: number): number[] => {
 	let a = [];
 	while (n > 0xfe) {
 		const r = n % 0xfe;
-		n = (n-r)/0xfe;
-		a.push(r+2); // 2~255
+		n = (n - r) / 0xfe;
+		a.push(r + 2); // 2~255
 	}
-	if (n)a.push(n + 2);
+	if (n) a.push(n + 2);
 	if (decimal) a = a.concat(1, decimal);
 	if (ng) a.push(1);
 	//1 8e 64 59 7f 69
@@ -41,7 +41,7 @@ const arr2Num = (bv: number[] | Uint8Array): number => {
 	for (; i < e; i++) {
 		const b = bv[i];
 		if (b === 1) break;
-		sum += (b - 2)*Math.pow(0xfe,i);
+		sum += (b - 2) * Math.pow(0xfe, i);
 	}
 	if (i === e) return sum;
 	if (i === e - 1) return -sum;
@@ -99,12 +99,13 @@ export const arrayify = (o: Data): ArrayIfyResult => {
 		let last = 0;
 		let endType: Types | undefined;
 
-		const setVs = (v: ArrayIfyResult) => {
+		const addEnd = (v: ArrayIfyResult) => {
 			const [type, ...z] = v;
 			if (z.length) last = vs.length;
-			if (type === Types.Object || type === Types.Array) {
+			const isObj = type === Types.Object;
+			if (isObj || type === Types.Array) {
 				const lt = v[end];
-				if (lt === undefined || lt === Types.String) vs.push(0);
+				if (lt === undefined || lt === Types.String || (isObj && lt === Types.Number)) vs.push(0);
 			}
 		};
 
@@ -126,7 +127,7 @@ export const arrayify = (o: Data): ArrayIfyResult => {
 					}
 				} else {
 					ks.push(type);
-					setVs(v);
+					addEnd(v);
 					if (type === Types.String) vs.push(0);
 				}
 			}
@@ -141,9 +142,10 @@ export const arrayify = (o: Data): ArrayIfyResult => {
 				ks = ks.concat(str2Arr(k), type);
 				const z = e.slice(1);
 				vs = vs.concat(z);
-				setVs(e);
-				if (type === Types.String || type=== Types.Number) vs.push(0);
+				addEnd(e);
+				if (type === Types.String || type === Types.Number) vs.push(0);
 			}
+			// console.log({ks,vs})
 		}
 		n = ks.length ? ks.concat(0).concat(vs.slice(0, last)) : [];
 		s = s.concat(n);
@@ -212,7 +214,7 @@ export const parseArray: typeof ParseArray = <T>(
 		return n as T;
 	} else if (t === Types.String) {
 		const s = type ? index : index + 1;
-		let i = s + 1;
+		let i = s;
 		while (arr[i]) i++;
 		const a = String.fromCharCode(...arr.slice(s, i));
 		if (parent) {
@@ -278,11 +280,10 @@ export const parseArray: typeof ParseArray = <T>(
 	}
 };
 
-const readStream = async (r: CompressionStream | DecompressionStream) => {
+export const readStream = async (reader: ReadableStreamDefaultReader) => {
 	const chunks: Uint8Array[] = [];
 	const sizes: number[] = [0];
 	let size = 0;
-	const reader = r.readable.getReader();
 	for (;;) {
 		const { done, value } = await reader.read();
 		if (done) break;
@@ -307,5 +308,5 @@ export const ugzip = async <T>(body: ReadableStream<Uint8Array> | null) => {
 	if (!body) return;
 	const ds = new DecompressionStream('gzip');
 	body.pipeThrough(ds);
-	return parseArray<T>(await readStream(ds));
+	return parseArray<T>(await readStream(ds.readable.getReader()));
 };

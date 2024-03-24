@@ -28,14 +28,12 @@ export const getObj = async (key: string) => {
 	});
 };
 
-export const putObj = async (file: File) => {
+export const putObj = async (obj: ArrayBuffer, name?: string, type?: string) => {
 	if (!r2) throw err;
-	const name = file.name;
-	const type = file.type;
-	const key = await bufHash(await file.arrayBuffer());
+	const key = await bufHash(obj);
 	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 	// @ts-expect-error
-	await r2.put(key, file, {
+	await r2.put(key, obj, {
 		customMetadata: {
 			name,
 			type

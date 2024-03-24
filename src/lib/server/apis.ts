@@ -1,9 +1,10 @@
-import type { RequestEvent } from '@sveltejs/kit';
+import { error, type RequestEvent } from '@sveltejs/kit';
 import { bukCli, kvCli } from '$lib/server/setup';
 import { Customers } from '$lib/server/schema';
 import type { APIRoute } from '../../ambient';
 import { flatObj } from '$lib/server/utils';
 import { parseArray } from '$lib/utils';
+import mime from 'mime';
 
 export const Apis: APIRoute = {
 	test: {
@@ -20,9 +21,16 @@ export const Apis: APIRoute = {
 			return bukCli.list();
 		},
 		async POST(event: RequestEvent) {
-			const form = await event.request.formData();
-			const file = form.get('file') as File;
-			if (file) return bukCli.put(file);
+			const data = await event.request.arrayBuffer();
+			if (!data) throw error(500, 'empty file');
+			const headers = event.request.headers;
+			let type = headers.get('x-file-type');
+			const name = headers.get('x-file-name');
+			if (!type && name) {
+				const ext = name.slice(name.lastIndexOf('.'));
+				if (ext) type = mime.getType(ext);
+			}
+			return bukCli.put(data, name, type);
 		}
 	},
 	users: {
@@ -58,8 +66,7 @@ export const Apis: APIRoute = {
 	},
 	kv: {
 		async GET() {
-			const ls = await kvCli.list();
-			return ls;
+			return await kvCli.list();
 		},
 		DELETE({ url }) {
 			const k = url.search.slice(1);
