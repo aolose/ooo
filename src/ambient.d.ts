@@ -1,6 +1,6 @@
 import { HttpMethod, RequestEvent } from '@sveltejs/kit';
 import { D1Database, R2Bucket, KVNamespace } from '@cloudflare/workers-types';
-
+type CacheConfig = { expire?: number; key?: string | (() => string) };
 type KVItem = string | ArrayBuffer | ArrayBufferView | ReadableStream;
 type sqlTemplateTag = <T>(
 	raw: TemplateStringsArray | string,
