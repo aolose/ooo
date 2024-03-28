@@ -1,15 +1,15 @@
 import { browser } from '$app/environment';
-import { arrayify, parseArray } from '$lib/utils';
-
-const CACHE = `ooo`;
+import { parseArray } from '$lib/utils';
 
 export const Caches = (() => {
+	const CACHE = `ooo`;
+	const prefix = 'http://a/';
+
 	let cache: Cache | undefined;
-	const keyPath = '/cache/keys';
 	let keys: string[] | undefined;
 
 	const getCache = async (key: string) => {
-		const r = await cache?.match(key);
+		const r = await cache?.match(prefix + key);
 		if (r) {
 			const exp = Date.parse(r.headers.get('expire') || '');
 			if (!exp || exp < Date.now()) {
@@ -21,25 +21,19 @@ export const Caches = (() => {
 	};
 
 	const loadKeys = async () => {
-		if (!keys) {
-			const r = await getCache(keyPath);
-			if (r) {
-				keys = r as string[];
-			} else keys = [];
-		}
-		return keys;
+		if (!keys && cache)
+			keys = (await cache.keys()).map(a => a.url.slice(9));
 	};
 
 	const saveKeys = async (key: string) => {
 		await loadKeys();
 		if (keys?.indexOf(key) === -1) {
 			keys.push(key);
-			await cache?.put(keyPath, new Response(new Uint8Array(arrayify(keys))));
 		}
 	};
 
 	const removeCache = async (key: string) => {
-		await cache?.delete(key);
+		await cache?.delete(prefix + key);
 		if (keys) {
 			const i = keys.indexOf(key);
 			if (i !== -1) keys.splice(i, 1);
@@ -63,7 +57,7 @@ export const Caches = (() => {
 			if (!cache) cache = await caches.open(CACHE);
 			if (cache) {
 				await saveKeys(key);
-				await cache.put(key, resp);
+				await cache.put(prefix+key, resp);
 			}
 		}
 	};

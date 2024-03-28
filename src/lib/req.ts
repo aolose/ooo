@@ -138,5 +138,3 @@ export const api = (apiName: keyof typeof Apis) => {
 		put: query('PUT')
 	};
 };
-
-export const clearCache = () => {};
