@@ -9,7 +9,7 @@
 	let ls: FileMeta[] = [];
 	const apiFile = api('files');
 	const loadLs = async () => {
-		ls = (await apiFile.get()) as FileMeta[];
+		ls = (await apiFile.get().use({ cache: { expire: 10 } })) as FileMeta[];
 	};
 	const del = (key: string) => () => {
 		apiFile.delete(key).success(() => {
@@ -45,7 +45,7 @@
 		</tr>
 		{#each ls as item (item.key)}
 			<tr>
-				<td><a href={`/res/${item.key}`}>{item.name}</a></td>
+				<td><a href={`/res/${item.key}`}>{decodeURI(item.name)}</a></td>
 				<td>{item.type}</td>
 				<td>{fileSize(item.size)}</td>
 				<td>{new Date(item.updated)}</td>

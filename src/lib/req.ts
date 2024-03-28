@@ -1,6 +1,8 @@
 import { type HttpMethod } from '@sveltejs/kit';
 import type { Apis } from '$lib/server/apis';
-import { arrayify, parseArray, ugzip } from '$lib/utils';
+import { arrayify, isEmpty, parseArray, ugzip } from '$lib/utils';
+import type { CacheConfig } from '../ambient';
+import { Caches } from '../cache';
 
 export const api = (apiName: keyof typeof Apis) => {
 	const baseUrl = 'http://a/api/';
@@ -14,7 +16,7 @@ export const api = (apiName: keyof typeof Apis) => {
 			 *  fetch duplex
 			 *  @see {@link https://fetch.spec.whatwg.org/#dom-requestinit-duplex}
 			 *  */
-			const opt: RequestInit & { duplex: 'half' | 'full' } = {
+			const opt: RequestInit & { method: string; duplex: 'half' | 'full' } = {
 				method,
 				signal: controller.signal,
 				headers: headers,
@@ -54,11 +56,42 @@ export const api = (apiName: keyof typeof Apis) => {
 				const bf = await r.arrayBuffer();
 				return parseArray(new Uint8Array(bf));
 			};
+			let cacheCfg: CacheConfig | undefined;
+			let cacheKey = '';
+			const pms = Promise.resolve().then(async () => {
+				const u = url.toString().slice(8);
 
-			const pms = Promise.resolve().then(() => {
-				return fetch(url.toString().slice(8), opt)
+				if (cacheCfg) {
+					const k = cacheCfg.key;
+					if (k) {
+						if (typeof k === 'string') cacheKey = k;
+						else cacheKey = k();
+					} else
+						cacheKey =
+							opt.method[1] + apiName + (data ? String.fromCharCode(...arrayify(data)) : '');
+					const r = await Caches.get(cacheKey);
+					if (r) {
+						if (pmsConnector.success) pmsConnector.success(r as T);
+						return r;
+					}
+				}
+
+				return fetch(u, opt)
 					.then(parseResult)
 					.then((data) => {
+						if (cacheKey && !isEmpty(data)) {
+							const headers = new Headers();
+							headers.set(
+								'expire',
+								new Date(Date.now() + (cacheCfg?.expire || 60) * 1e3).toUTCString()
+							);
+							Caches.put(
+								cacheKey,
+								new Response(new Uint8Array(arrayify(data as T)), {
+									headers
+								})
+							);
+						}
 						if (pmsConnector.success) pmsConnector.success(data as T);
 						return data as T;
 					})
@@ -67,16 +100,18 @@ export const api = (apiName: keyof typeof Apis) => {
 						console.error(reason);
 					});
 			}) as Promise<T> & {
-				withHeaders: (headers: { [key: string]: string }) => typeof pms;
+				use: (cfg: { headers?: { [key: string]: string }; cache?: CacheConfig }) => typeof pms;
 				abort: () => void;
 				success: (fn: successFn) => typeof pms;
 				fail: (fn: failFn) => typeof pms;
 			};
 
-			pms.withHeaders = (h) => {
-				for (const [k, v] of Object.entries(h)) {
-					headers.set(k, v);
-				}
+			pms.use = ({ headers: h, cache }) => {
+				if (h)
+					for (const [k, v] of Object.entries(h)) {
+						headers.set(k, v);
+					}
+				if (cache) cacheCfg = cache;
 				return pms;
 			};
 
@@ -103,3 +138,5 @@ export const api = (apiName: keyof typeof Apis) => {
 		put: query('PUT')
 	};
 };
+
+export const clearCache = () => {};
