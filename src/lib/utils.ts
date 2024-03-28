@@ -310,3 +310,10 @@ export const ugzip = async <T>(body: ReadableStream<Uint8Array> | null) => {
 	body.pipeThrough(ds);
 	return parseArray<T>(await readStream(ds.readable.getReader()));
 };
+
+export const isEmpty = (data: unknown) => {
+	if (data === '' || data === null || data === undefined) return true;
+	if (data instanceof Array) return !data.length;
+	if (data instanceof Object) return !Object.keys(data).length;
+	return false;
+};

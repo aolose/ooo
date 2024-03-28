@@ -79,9 +79,11 @@ export const uploader = (file?: File) => {
 	});
 	api('files')
 		.post(rs)
-		.withHeaders({
-			'x-file-name': name,
-			'x-file-type': type
+		.use({
+			headers: {
+				'x-file-name': encodeURI(name),
+				'x-file-type': type
+			}
 		})
 		.success((a) => {
 			progress(a as string, true);

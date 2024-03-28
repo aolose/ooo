@@ -1,7 +1,7 @@
 {
 	"extends": "./.svelte-kit/tsconfig.json",
 	"include": ["test", "src"],
-	"exclude": ["src/lib/utils-wasm"],
+	"exclude": ["src/lib/utils-wasm/**.*.js"],
 	"compilerOptions": {
 		"allowJs": true,
 		"checkJs": true,
