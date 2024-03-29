@@ -5,6 +5,7 @@
 	import { fileSize } from '$lib/utils';
 	import { uploader } from '$lib/upload';
 	import Table from '$lib/components/table.svelte';
+	import Box from './box.svelte';
 
 	let ls: FileMeta[] = [];
 	const apiFile = api('files');
@@ -30,8 +31,7 @@
 	}
 </script>
 
-<fieldset>
-	<legend>R2 TEST</legend>
+<Box name="R2 TEST">
 	<button on:click={loadLs}>load files</button>
 	<input bind:this={file} name="file" type="file" />
 	<button on:click={up}>{pending ? 'uploading' : 'upload'}</button>
@@ -55,4 +55,4 @@
 			</tr>
 		{/each}
 	</Table>
-</fieldset>
+</Box>

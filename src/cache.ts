@@ -8,32 +8,31 @@ export const Caches = (() => {
 	let cache: Cache | undefined;
 	let keys: string[] | undefined;
 
-	const getCache =async (key:string)=>{
+	const getCache = async (key: string) => {
 		const r = await cache?.match(prefix + key);
 		const exp = Date.parse(r?.headers.get('expire') || '');
 		if (!exp || exp < Date.now()) {
 			removeCache(key).then();
-      return null
+			return null;
 		}
-		return  r
-	}
+		return r;
+	};
 
 	const getData = async (key: string) => {
-		const r = await getCache(key)
+		const r = await getCache(key);
 		if (r) {
 			return parseArray(new Uint8Array(await r.arrayBuffer()));
 		}
 	};
 
-	const openCache =async ()=>{
+	const openCache = async () => {
 		cache = await caches.open(CACHE);
-		await loadKeys()
-		keys?.forEach(getCache)
-	}
+		await loadKeys();
+		keys?.forEach(getCache);
+	};
 
 	const loadKeys = async () => {
-		if (!keys && cache)
-			keys = (await cache.keys()).map(a => a.url.slice(9));
+		if (!keys && cache) keys = (await cache.keys()).map((a) => a.url.slice(9));
 	};
 
 	const saveKeys = async (key: string) => {
@@ -64,10 +63,10 @@ export const Caches = (() => {
 		get: getData,
 		async put(key: string, resp: Response) {
 			if (!browser) return;
-			if (!cache) await openCache()
+			if (!cache) await openCache();
 			if (cache) {
 				await saveKeys(key);
-				await cache.put(prefix+key, resp);
+				await cache.put(prefix + key, resp);
 			}
 		}
 	};
