@@ -56,8 +56,8 @@ export const ecdh = (() => {
 			shareKeyUsage
 		);
 		if (!browser) {
-			const { kvCli } = await import('$lib/server/setup');
-			await kvCli.set('shk', await exportKey(shareKey));
+			const { kv } = await import('$lib/fix');
+			await kv.set('shk', await exportKey(shareKey));
 		}
 	};
 
@@ -74,8 +74,8 @@ export const ecdh = (() => {
 
 	const recover = async () => {
 		if (!browser && !shareKey) {
-			const { kvCli } = await import('$lib/server/setup');
-			const shk = (await kvCli.get('shk', 'arrayBuffer')) as ArrayBuffer | undefined;
+			const { kv } = await import('$lib/fix');
+			const shk = (await kv.get('shk', 'arrayBuffer')) as ArrayBuffer | undefined;
 			if (shk) shareKey = await loadKey(shk, algorithm_AES_CBC, shareKeyUsage);
 		}
 	};

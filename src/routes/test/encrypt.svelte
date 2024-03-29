@@ -39,9 +39,7 @@
 	<button on:click={get}>
 		{p ? 'pending' : 'GET'}
 	</button>
-	<textarea readonly>
-		{echo}
-	</textarea>
+	<textarea readonly>{echo}</textarea>
 </Box>
 
 <style>
