@@ -1,5 +1,5 @@
-import { HttpMethod, RequestEvent } from '@sveltejs/kit';
 import { D1Database, R2Bucket, KVNamespace } from '@cloudflare/workers-types';
+
 type CacheConfig = { expire?: number; key?: string | (() => string) };
 type KVItem = string | ArrayBuffer | ArrayBufferView | ReadableStream;
 type sqlTemplateTag = <T>(
@@ -17,12 +17,14 @@ type FileMeta = {
 	updated: number;
 };
 
-type ApiFunction = (
-	params: RequestEvent<Partial<Record<string, string>>, string | null>
-) => unknown;
+type ApiFunction<T> = (params: { data?: T; headers: Headers }) => unknown;
 
 type APIHandler = {
-	[key in HttpMethod]?: ApiFunction;
+	POST?: ApiFunction<ArrayBuffer | undefined>;
+	PUT?: ApiFunction<ArrayBuffer | undefined>;
+	PATCH?: ApiFunction<ArrayBuffer | undefined>;
+	GET?: ApiFunction<string | undefined>;
+	DELETE?: ApiFunction<string | undefined>;
 };
 
 type APIRoute = {
@@ -37,8 +39,11 @@ type PlatformEnv = {
 };
 
 type KVClient = {
-	get: (key: string) => Promise<string | null>;
-	set: (key: string, value: string, expire? = 0) => Promise<void>;
+	get: (
+		key: string,
+		type?: 'string' | 'arrayBuffer' | 'stream'
+	) => Promise<string | ArrayBuffer | null>;
+	set: (key: string, value: string | ArrayBuffer, expire? = 0) => Promise<void>;
 	del: (key: string) => Promise<void>;
 	list: () => Promise<[string, string | null][]>;
 };

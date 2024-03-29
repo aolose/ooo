@@ -2,6 +2,7 @@
 	import Table from '$lib/components/table.svelte';
 	import { api } from '$lib/req';
 	import { onMount } from 'svelte';
+	import Box from './box.svelte';
 
 	let ls: [string, string | null][] = [];
 	const load = async () => {
@@ -25,8 +26,7 @@
 		value = '';
 </script>
 
-<fieldset>
-	<legend>KV TEST</legend>
+<Box name="KV TEST">
 	<div>
 		<label><span>key:</span><input bind:value={key} name="key" /></label>
 		<label><span>value:</span><input bind:value name="value" /></label>
@@ -49,4 +49,4 @@
 			</tr>
 		{/each}
 	</Table>
-</fieldset>
+</Box>

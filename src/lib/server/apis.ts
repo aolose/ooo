@@ -1,29 +1,35 @@
-import { error, type RequestEvent } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 import { bukCli, kvCli } from '$lib/server/setup';
 import { Customers } from '$lib/server/schema';
 import type { APIRoute } from '../../ambient';
 import { flatObj } from '$lib/server/utils';
 import { parseArray } from '$lib/utils';
 import mime from 'mime';
+import { ecdh } from '$lib/crypto';
 
 export const Apis: APIRoute = {
-	test: {
-		GET() {
-			return 'hello world';
+	hello: {
+		async POST({ data }) {
+			if (data) return await ecdh.init(data);
+		}
+	},
+	echo: {
+		GET({ data }) {
+			return data;
+		},
+		POST({ data }) {
+			return data;
 		}
 	},
 	files: {
-		DELETE(e: RequestEvent) {
-			const key = e.url.search.slice(1);
-			if (key) return bukCli.del(key);
+		DELETE({ data }) {
+			if (data) return bukCli.del(data);
 		},
 		GET() {
 			return bukCli.list();
 		},
-		async POST(event: RequestEvent) {
-			const data = await event.request.arrayBuffer();
+		async POST({ data, headers }) {
 			if (!data) throw error(500, 'empty file');
-			const headers = event.request.headers;
 			let type = headers.get('x-file-type');
 			const name = headers.get('x-file-name');
 			if (!type && name) {
@@ -56,8 +62,9 @@ export const Apis: APIRoute = {
 				gen()
 			);
 		},
-		async GET(e) {
-			const keys = e.url.search.slice(1).split(',');
+		async GET({ data }) {
+			if (!data) return;
+			const keys = data.split(',');
 			const r = await Customers.all();
 			if (r.error) {
 				// todo
@@ -68,12 +75,12 @@ export const Apis: APIRoute = {
 		async GET() {
 			return await kvCli.list();
 		},
-		DELETE({ url }) {
-			const k = url.search.slice(1);
-			return kvCli.del(k);
+		DELETE({ data }) {
+			if (data) return kvCli.del(data);
 		},
-		async POST({ request }) {
-			const [k, v] = parseArray<[string, string]>(new Uint8Array(await request.arrayBuffer()));
+		async POST({ data }) {
+			if (!data) return;
+			const [k, v] = parseArray<[string, string]>(new Uint8Array(data));
 			if (k && v) await kvCli.set(k, v);
 		}
 	}

@@ -4,6 +4,11 @@ import { parseArray, arrayify } from '../../src/lib/utils';
 const json = (a: unknown) => JSON.parse(JSON.stringify(a));
 
 describe('test jsonEnc and jsonDec', () => {
+	it('String chinese', () => {
+		const a = '撒旦';
+		expect(parseArray(arrayify(a))).toEqual(json(a));
+	});
+
 	it('String', () => {
 		const a = 'abc';
 		expect(parseArray(arrayify(a))).toEqual(json(a));

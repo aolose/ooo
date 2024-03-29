@@ -49,12 +49,15 @@ const arr2Num = (bv: number[] | Uint8Array): number => {
 	if (decimal < 0) sum = -sum;
 	return sum + decimal / Math.pow(10, ~~Math.log10(Math.abs(decimal)) + 1);
 };
+const textEncoder = new TextEncoder();
+const textDcoder = new TextDecoder('utf-8');
 
-const str2Arr = (s: string) => {
-	const n: number[] = [];
-	let i = s.length;
-	while (i--) n[i] = s.charCodeAt(i);
-	return n;
+export const str2Arr = (s: string) => {
+	return Array.from(textEncoder.encode(s));
+};
+
+export const arr2Str = (arr: Uint8Array | number[]) => {
+	return textDcoder.decode(new Uint8Array(arr));
 };
 
 export const groupArr = (size: number, data: unknown[]) => {
@@ -216,7 +219,7 @@ export const parseArray: typeof ParseArray = <T>(
 		const s = type ? index : index + 1;
 		let i = s;
 		while (arr[i]) i++;
-		const a = String.fromCharCode(...arr.slice(s, i));
+		const a = arr2Str(arr.slice(s, i));
 		if (parent) {
 			attachToParent(a);
 			return i + 1;
@@ -260,7 +263,7 @@ export const parseArray: typeof ParseArray = <T>(
 			const c = arr[i];
 			if (c < 8) {
 				if (!c) break;
-				ks.push(String.fromCharCode(...arr.slice(s, i)));
+				ks.push(arr2Str(arr.slice(s, i)));
 				types.push(c);
 				s = i + 1;
 			}
@@ -304,11 +307,11 @@ export const gzip = async (arr: number[]) => {
 	return ds.readable;
 };
 
-export const ugzip = async <T>(body: ReadableStream<Uint8Array> | null) => {
+export const ugzip = async (body: ReadableStream<Uint8Array> | null) => {
 	if (!body) return;
 	const ds = new DecompressionStream('gzip');
 	body.pipeThrough(ds);
-	return parseArray<T>(await readStream(ds.readable.getReader()));
+	return new Uint8Array(await readStream(ds.readable.getReader()));
 };
 
 export const isEmpty = (data: unknown) => {
@@ -316,4 +319,17 @@ export const isEmpty = (data: unknown) => {
 	if (data instanceof Array) return !data.length;
 	if (data instanceof Object) return !Object.keys(data).length;
 	return false;
+};
+
+export const delay = (fn: () => unknown, delay: number) => {
+	let timer: number | NodeJS.Timeout = -1;
+	type Params = Parameters<typeof fn>;
+	return async (...args: Params) => {
+		const pms = new Promise((resolve) => {
+			clearTimeout(timer);
+			timer = setTimeout(resolve, delay);
+		});
+		await pms;
+		return fn(...args);
+	};
 };

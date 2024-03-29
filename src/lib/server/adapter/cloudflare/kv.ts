@@ -19,8 +19,13 @@ export const del = async (k: string) => {
 	await kv.delete(k);
 };
 
-export const get = async (key: string) => {
+export const get = async (key: string, type?: 'text' | 'stream' | 'arrayBuffer') => {
 	if (!kv) throw err;
+	if (type) {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-expect-error
+		return await kv.get(key, { type: type });
+	}
 	return await kv.get(key);
 };
 

@@ -22,8 +22,8 @@ Just trying something
 - [x] Wasm
   - just try rust hello world
 - [ ] Diff patch request
-- [ ] Encrypt and decrypt request
-- [ ] Cache manage
+- [x] Encrypt and decrypt request
+- [x] Cache manage
 
 ## Modules
 

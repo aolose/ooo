@@ -3,6 +3,7 @@
 	import { onMount } from 'svelte';
 	import { groupArr } from '$lib/utils';
 	import Table from '$lib/components/table.svelte';
+	import Box from './box.svelte';
 
 	let list = [] as unknown[][];
 	const head = ['CustomerName', 'CompanyName', 'ContactName'];
@@ -22,8 +23,7 @@
 	onMount(load);
 </script>
 
-<fieldset>
-	<legend>DB TEST</legend>
+<Box name="DB TEST">
 	<button on:click={add}>ADD</button>
 	<button on:click={clear}>Clear</button>
 	<Table>
@@ -40,4 +40,4 @@
 			</tr>
 		{/each}
 	</Table>
-</fieldset>
+</Box>
