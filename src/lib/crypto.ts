@@ -12,6 +12,7 @@ import { browser } from '$app/environment';
 import { error } from '@sveltejs/kit';
 
 export const ecdh = (() => {
+	if(!crypto)throw Error('crypto undefined!')
 	const { subtle } = crypto;
 
 	const algorithm_ECDH = {
