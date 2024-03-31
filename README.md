@@ -24,6 +24,7 @@ Just trying something
 - [ ] Diff patch request
 - [x] Encrypt and decrypt request
 - [x] Cache manage
+- [x] Support Websocket
 
 ## Modules
 

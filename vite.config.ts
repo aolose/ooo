@@ -1,14 +1,14 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
 import basicSsl from '@vitejs/plugin-basic-ssl';
-
+import wsPlugin from './vite';
 export default defineConfig({
 	plugins: [
 		sveltekit(),
+		wsPlugin('$lib/server/ws'),
 		basicSsl({
 			name: 'dev',
-			certDir: 'C:/Users/ufota/Downloads',
-			domains: ['a.dev']
+			certDir: '.cert'
 		})
 	],
 	server: {
