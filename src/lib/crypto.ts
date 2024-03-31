@@ -12,8 +12,9 @@ import { browser } from '$app/environment';
 import { error } from '@sveltejs/kit';
 
 export const ecdh = (() => {
-	if(!globalThis.crypto)return;
-	const { subtle } = crypto;
+	// for cloudflare build
+	// error: crypto not found
+	const { subtle } = globalThis.crypto||{};
 
 	const algorithm_ECDH = {
 		name: 'ECDH',

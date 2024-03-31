@@ -18,7 +18,7 @@ type FileMeta = {
 };
 
 type ApiFunction<T> = (params: { data?: T; headers: Headers }) => unknown;
-type ApiWSFunction = (server: WebSocketServer, client?: WebSocket) => void;
+type ApiWSFunction = (server: WebSocketServer, client: WebSocket|WebSocketServer) => void;
 
 type APIHandler = {
 	POST?: ApiFunction<ArrayBuffer | undefined>;
