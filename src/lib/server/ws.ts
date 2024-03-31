@@ -17,7 +17,7 @@ export const handle: serverHandle = async (req, socket, head) => {
 				srv = new WebSocketServer({ noServer: true });
 				wsPool[pathname] = srv;
 				srv.on('connection', (serv: WebSocketServer) => {
-					fn(serv);
+					fn(serv,serv);
 				});
 			}
 			srv.handleUpgrade(req as Connect.IncomingMessage, socket, head, (ws) => {
