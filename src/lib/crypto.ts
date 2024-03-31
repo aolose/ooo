@@ -11,8 +11,9 @@ import { api } from '$lib/req';
 import { browser } from '$app/environment';
 import { error } from '@sveltejs/kit';
 
+const {crypto} = globalThis
 export const ecdh = (() => {
-	const { subtle } = global.crypto;
+	const { subtle } = crypto;
 
 	const algorithm_ECDH = {
 		name: 'ECDH',
