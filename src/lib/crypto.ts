@@ -11,7 +11,6 @@ import { api } from '$lib/req';
 import { browser } from '$app/environment';
 import { error } from '@sveltejs/kit';
 
-const {crypto} = globalThis
 export const ecdh = (() => {
 	const { subtle } = crypto;
 
