@@ -30,24 +30,22 @@ export const handle: serverHandle = async (req, socket, head) => {
             const webSocketPair = new WebSocketPair();
             const client = webSocketPair[0],
                 server = webSocketPair[1] as WebSocket & {
+                    accept: () => void,
+                    close: (code: number, reason?: string) => void
+                    send: (message: string | ArrayBuffer | ArrayBufferView) => void,
                     on: (
-                        eventName: 'connection' | 'error' | 'message' | 'close'|'open',
+                        eventName: 'error' | 'message' | 'close',
                         callback: (this: WebSocket, event: Event | string) => void
                     ) => void;
                 };
-
-            if (!server.on) {
-                server.on = function (event, cb) {
-					if(event==='connection')event='open'
-                    server.addEventListener(event, (e) => {
-                        if (event === 'message') cb.call(server, (e as MessageEvent).data)
-                        else if (event === 'open') cb.call(server, e)
-                        else if (event === 'error') cb.call(server, e)
-                        else if (event === 'close') cb.call(server, e)
-                    })
-                }
+            server.accept();
+            server.on = function (event, cb) {
+                server.addEventListener(event, (e) => {
+                    if (event === 'message') cb.call(server, (e as MessageEvent).data)
+                    else if (event === 'error') cb.call(server, e)
+                    else if (event === 'close') cb.call(server, e)
+                })
             }
-
             fn(server, client);
             return new Response(null, {
                 status: 101,
