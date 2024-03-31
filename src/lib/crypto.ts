@@ -12,7 +12,7 @@ import { browser } from '$app/environment';
 import { error } from '@sveltejs/kit';
 
 export const ecdh = (() => {
-	const { subtle } = crypto;
+	const { subtle } = global.crypto;
 
 	const algorithm_ECDH = {
 		name: 'ECDH',
