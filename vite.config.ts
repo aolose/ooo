@@ -4,8 +4,8 @@ import basicSsl from '@vitejs/plugin-basic-ssl';
 import wsPlugin from './vite';
 export default defineConfig({
 	plugins: [
-		wsPlugin('$lib/server/ws'),
 		sveltekit(),
+		wsPlugin('$lib/server/ws'),
 		basicSsl({
 			name: 'dev',
 			certDir: '.cert'
