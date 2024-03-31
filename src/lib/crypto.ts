@@ -10,9 +10,9 @@
 import { api } from '$lib/req';
 import { browser } from '$app/environment';
 import { error } from '@sveltejs/kit';
+import crypto from "crypto"
 
 export const ecdh = (() => {
-	if(!crypto)throw Error('crypto undefined!')
 	const { subtle } = crypto;
 
 	const algorithm_ECDH = {
