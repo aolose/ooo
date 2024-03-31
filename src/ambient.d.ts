@@ -18,6 +18,7 @@ type FileMeta = {
 };
 
 type ApiFunction<T> = (params: { data?: T; headers: Headers }) => unknown;
+type ApiWSFunction = (server: WebSocketServer, client?: WebSocket) => void;
 
 type APIHandler = {
 	POST?: ApiFunction<ArrayBuffer | undefined>;
@@ -25,6 +26,7 @@ type APIHandler = {
 	PATCH?: ApiFunction<ArrayBuffer | undefined>;
 	GET?: ApiFunction<string | undefined>;
 	DELETE?: ApiFunction<string | undefined>;
+	WS?: ApiWSFunction;
 };
 
 type APIRoute = {

@@ -8,4 +8,4 @@ import type { KVClient } from '../ambient';
  * if(!browser)import('server/xxx')
  * will throw error
  */
-export const kv = {} as KVClient
+export const kv = {} as KVClient;

@@ -11,6 +11,12 @@ export const Apis: APIRoute = {
 	hello: {
 		async POST({ data }) {
 			if (data) return await ecdh.init(data);
+		},
+		async WS(serv) {
+			serv.on('error', console.error);
+			serv.on('message', function message(data: unknown) {
+				serv.send('echo:' + data);
+			});
 		}
 	},
 	echo: {

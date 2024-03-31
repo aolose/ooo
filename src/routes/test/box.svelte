@@ -9,6 +9,7 @@
 
 <style>
 	fieldset {
+		min-width: 45%;
 		margin-bottom: 10px;
 	}
 </style>
