@@ -41,7 +41,10 @@ export default function (handle: string) {
                     }
                 `
 					);
-				return { code };
+				const ast = this.parse(code,{
+					allowReturnOutsideFunction:true
+				})
+				return { code ,ast};
 			}
 			return null;
 		},
