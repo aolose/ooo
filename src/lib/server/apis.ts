@@ -13,9 +13,9 @@ export const Apis: APIRoute = {
 			if (data) return await ecdh.init(data);
 		},
 		async WS(serv) {
-			serv.on('error', console.error);
-			serv.on('message', function message(data: unknown) {
-				serv.send('echo:' + data);
+			serv.addEventListener('error', console.error);
+			serv.addEventListener('message', function (e) {
+				serv.send('echo:' + e.data);
 			});
 		}
 	},
