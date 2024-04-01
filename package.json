@@ -21,7 +21,6 @@
 		"@cloudflare/workers-types": "^4.20240329.0",
 		"@playwright/test": "^1.42.1",
 		"@sveltejs/adapter-auto": "^3.2.0",
-		"@sveltejs/adapter-cloudflare-workers": "^2.2.0",
 		"@sveltejs/kit": "^2.5.5",
 		"@sveltejs/vite-plugin-svelte": "^3.0.2",
 		"@types/eslint": "^8.56.6",
@@ -40,13 +39,13 @@
 		"tslib": "^2.6.2",
 		"typescript": "^5.4.3",
 		"vite": "^5.2.7",
-		"vite-sveltekit-cf-ws": "file:C:/Users/ufota/Desktop/vite",
+		"vite-sveltekit-cf-ws": "./packages/sveltekit-cf-ws",
 		"vitest": "^1.4.0",
+		"@sveltejs/adapter-cloudflare": "^4.2.0",
 		"wrangler": "^3.41.0"
 	},
 	"type": "module",
 	"dependencies": {
-		"@sveltejs/adapter-cloudflare": "^4.2.0",
 		"cookie": "^0.6.0",
 		"mime": "^4.0.1"
 	}

@@ -83,8 +83,8 @@ devDependencies:
     specifier: ^5.2.7
     version: 5.2.7(sass@1.72.0)
   vite-sveltekit-cf-ws:
-    specifier: file:C:/Users/ufota/Desktop/vite
-    version: file:../../Desktop/vite
+    specifier: ./packages/sveltekit-cf-ws
+    version: link:packages/sveltekit-cf-ws
   vitest:
     specifier: ^1.4.0
     version: 1.4.0(sass@1.72.0)
@@ -3239,8 +3239,3 @@ packages:
 
   /zod@3.22.4:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
-
-  file:../../Desktop/vite:
-    resolution: {directory: ../../Desktop/vite, type: directory}
-    name: vite-sveltekit-cf-ws
-    dev: true
