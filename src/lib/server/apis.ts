@@ -25,6 +25,10 @@ export const Apis: APIRoute = {
 			if (data) return await ecdh.init(data);
 		},
 		async WS(serv) {
+			devLog(3,'ws start!')
+			devLog(4,serv.addEventListener)
+			devLog(5,serv.on)
+			devLog(6,serv.onmessage)
 			serv.addEventListener('error', function (e) {
 				devLog(0,e && (e.message))
 				serv.send(e.toString())
