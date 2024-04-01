@@ -35,10 +35,10 @@ devDependencies:
     specifier: ^8.56.6
     version: 8.56.6
   '@typescript-eslint/eslint-plugin':
-    specifier: ^7.4.0
+    specifier: ^7.1.1
     version: 7.4.0(@typescript-eslint/parser@7.4.0)(eslint@8.57.0)(typescript@5.4.3)
   '@typescript-eslint/parser':
-    specifier: ^7.4.0
+    specifier: ^7.1.1
     version: 7.4.0(eslint@8.57.0)(typescript@5.4.3)
   '@vitejs/plugin-basic-ssl':
     specifier: ^1.1.0
