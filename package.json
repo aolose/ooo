@@ -7,7 +7,7 @@
 		"build": "vite build",
 		"update": "git pull && git submodule update --init --recursive --remote --merge && pnpm i",
 		"preview": "echo skip preview",
-		"localPreview": "wrangler dev --port 4173",
+		"localPreview": "wrangler dev --port 4174",
 		"test": "npm run test:e2e && npm run test:unit",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
