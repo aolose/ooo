@@ -7,6 +7,7 @@ import {Apis, devLog} from "$lib/server/apis";
 import {bind, watchLog} from "vite-sveltekit-cf-ws";
 
 
+let once = 0
 const initSockets = ()=>{
 	console.log('init sockets')
 	watchLog((s:string)=>devLog(0,s))
@@ -18,9 +19,8 @@ const initSockets = ()=>{
 }
 
 export const handle: Handle = async ({ event, resolve }) => {
-	await connect(event.platform?.env,
-		execSchema,initSockets
-	);
+	if(!once++)initSockets()
+	await connect(event.platform?.env, execSchema);
 	if (event.url.pathname.startsWith('/api/')) {
 		return apiHandler(event);
 	}
