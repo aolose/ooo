@@ -3,7 +3,6 @@
 	"version": "0.0.2",
 	"private": true,
 	"scripts": {
-		"prebuild":"rm -rf ./node_modules/.pnpm/file+packages+vite-sveltekit-cf-ws && pnpm link ./packages/vite-sveltekit-cf-ws",
 		"dev": "vite dev",
 		"build": "vite build",
 		"preview": "wrangler dev --port 4173",
