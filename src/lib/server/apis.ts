@@ -7,9 +7,13 @@ import { parseArray } from '$lib/utils';
 import mime from 'mime';
 import { ecdh } from '$lib/crypto';
 
-const logs = [] as string[]
+let logs = [] as string[]
 export const devLog = (type:number,data:unknown)=>{
+	if(/api\/log/.test(`${data}`))return
 	logs.push(`${new Date().toTimeString()} ${type} ${data}`)
+	const len = logs.length
+	const max = 100
+	if(len>max) logs = logs.slice(len-max)
 }
 
 export const Apis: APIRoute = {
@@ -24,12 +28,9 @@ export const Apis: APIRoute = {
 		async POST({ data }) {
 			if (data) return await ecdh.init(data);
 		},
-		async WS(serv,client) {
+		async WS(serv) {
 			serv.addEventListener('error', function (e) {
 				serv.send(e.toString())
-			});
-			client.addEventListener('message', function (e) {
-				serv.send('echo:' + e.data);
 			});
 			serv.addEventListener('message', function (e) {
 				serv.send('echo:' + e.data);
