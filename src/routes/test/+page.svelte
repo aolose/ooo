@@ -4,6 +4,7 @@
 	import KV from './kv.svelte';
 	import En from './encrypt.svelte';
 	import WS from './ws.svelte';
+	import LOG from './log.svelte';
 	import { onMount } from 'svelte';
 	import init, { is_object } from '$lib/utils-wasm/pkg';
 
@@ -19,6 +20,7 @@
 	<KV />
 	<En />
 	<WS />
+	<LOG />
 </div>
 
 <style lang="scss">

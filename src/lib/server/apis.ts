@@ -7,18 +7,31 @@ import { parseArray } from '$lib/utils';
 import mime from 'mime';
 import { ecdh } from '$lib/crypto';
 
+const logs = [] as string[]
+const devLog = (type:number,data:unknown)=>{
+	logs.push(`${new Date().toTimeString()} ${type} ${data}`)
+}
+
 export const Apis: APIRoute = {
+	log:{
+	  GET(){
+		  const s = logs.slice()
+		  logs.length=0
+		  return s
+	  }
+	},
 	hello: {
 		async POST({ data }) {
 			if (data) return await ecdh.init(data);
 		},
 		async WS(serv) {
+			devLog(3,serv.readyState)
 			serv.addEventListener('error', function (e) {
-				console.error(e)
+				devLog(0,e && (e.message||e.data))
 				serv.send(e.toString())
 			});
 			serv.addEventListener('message', function (e) {
-				console.log(e)
+				devLog(1,e && (e.message||e.data))
 				serv.send('echo:' + e.data);
 			});
 		}
