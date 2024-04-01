@@ -1,7 +1,7 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vitest/config';
 import basicSsl from '@vitejs/plugin-basic-ssl';
-import wsPlugin from 'vite-cloudflare-sveltekit-ws';
+import wsPlugin from 'vite-sveltekit-cf-ws';
 export default defineConfig({
 	plugins: [
 		sveltekit(),

@@ -4,7 +4,7 @@ import { filter } from '$lib/server/firewall';
 import { connect } from '$lib/server/setup';
 import { execSchema } from '$lib/server/schema';
 import {Apis} from "$lib/server/apis";
-import {bind} from "vite-cloudflare-sveltekit-ws";
+import {bind} from "vite-sveltekit-cf-ws";
 
 
 const initSockets = ()=>{
