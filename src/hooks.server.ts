@@ -9,10 +9,14 @@ import {bind, watchLog} from "vite-sveltekit-cf-ws";
 
 let once = 0
 const initSockets = ()=>{
-	console.log('init sockets')
-	watchLog((s:string)=>devLog(0,s))
+	devLog(3,'init sockets')
+	watchLog((s)=>{
+		devLog(0,s)
+		return ''
+	})
 	Object.entries(Apis).forEach(([path,m])=>{
 		if(m.WS){
+			devLog(3,`bind ws: ${'/api/'+path}`)
 			bind('/api/'+path,m.WS)
 		}
 	})
