@@ -12,3 +12,4 @@ vite.config.ts.timestamp-*
 /.wrangler
 /src/lib/utils-wasm/target/
 /src/lib/utils-wasm/Cargo.lock
+/.cert/
