@@ -2,6 +2,7 @@
 	import R2 from './r2.svelte';
 	import D1 from './d1.svelte';
 	import KV from './kv.svelte';
+	import Log from './log.svelte';
 	import En from './encrypt.svelte';
 	import WS from './ws.svelte';
 	import { onMount } from 'svelte';
@@ -19,6 +20,7 @@
 	<KV />
 	<En />
 	<WS />
+	<Log />
 </div>
 
 <style lang="scss">

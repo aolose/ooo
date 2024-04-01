@@ -1,0 +1,3 @@
+[submodule "packages/sveltekit-cf-ws"]
+	path = packages/sveltekit-cf-ws
+	url = https://github.com/aolose/vite-sveltekit-cf-ws.git
