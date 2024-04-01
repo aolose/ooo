@@ -8,7 +8,7 @@ import mime from 'mime';
 import { ecdh } from '$lib/crypto';
 
 const logs = [] as string[]
-const devLog = (type:number,data:unknown)=>{
+export const devLog = (type:number,data:unknown)=>{
 	logs.push(`${new Date().toTimeString()} ${type} ${data}`)
 }
 
