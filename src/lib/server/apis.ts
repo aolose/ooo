@@ -14,9 +14,11 @@ export const Apis: APIRoute = {
 		},
 		async WS(serv) {
 			serv.addEventListener('error', function (e) {
+				console.error(e)
 				serv.send(e.toString())
 			});
 			serv.addEventListener('message', function (e) {
+				console.log(e)
 				serv.send('echo:' + e.data);
 			});
 		}
