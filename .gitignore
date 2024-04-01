@@ -2,7 +2,7 @@
 node_modules
 /build
 /.svelte-kit
-/package
+/repo
 .env.example
 !.env.example
 vite.config.js.timestamp-*
@@ -13,3 +13,4 @@ vite.config.ts.timestamp-*
 /src/lib/utils-wasm/target/
 /src/lib/utils-wasm/Cargo.lock
 /.cert/
+/packages/vite-sveltekit-cf-ws/
