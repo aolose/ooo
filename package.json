@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "vite build",
-		"prebuild": "git submodule update --remote --merge && pnpm i",
+		"prebuild": "git submodule update --init --recursive --remote --merge && pnpm i",
 		"preview": "wrangler dev --port 4173",
 		"test": "npm run test:e2e && npm run test:unit",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
