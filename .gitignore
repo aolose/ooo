@@ -12,4 +12,3 @@ vite.config.ts.timestamp-*
 /src/lib/utils-wasm/target/
 /src/lib/utils-wasm/Cargo.lock
 /.cert/
-/packages/vite-sveltekit-cf-ws/
