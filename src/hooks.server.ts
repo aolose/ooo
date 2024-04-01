@@ -11,7 +11,7 @@ const initSockets = ()=>{
 	console.log('init sockets')
 	Object.entries(Apis).forEach(([path,m])=>{
 		if(m.WS){
-			bind('/api/'+path,m.WS as WebSocket)
+			bind('/api/'+path,m.WS)
 		}
 	})
 }
