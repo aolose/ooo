@@ -24,17 +24,14 @@ export const Apis: APIRoute = {
 		async POST({ data }) {
 			if (data) return await ecdh.init(data);
 		},
-		async WS(serv) {
-			devLog(3,'ws start!')
-			devLog(4,serv.addEventListener)
-			devLog(5,serv.on)
-			devLog(6,serv.onmessage)
+		async WS(serv,client) {
 			serv.addEventListener('error', function (e) {
-				devLog(0,e && (e.message))
 				serv.send(e.toString())
 			});
+			client.addEventListener('message', function (e) {
+				serv.send('echo:' + e.data);
+			});
 			serv.addEventListener('message', function (e) {
-				devLog(1,e && (e.data))
 				serv.send('echo:' + e.data);
 			});
 		}

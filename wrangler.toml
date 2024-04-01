@@ -1,5 +1,5 @@
-compatibility_date = "2022-04-05"
 workers_dev = true
+compatibility_date = "2024-04-01"
 main = ".svelte-kit/cloudflare/_worker.js"
 compatibility_flags = ["nodejs_compat"]
 kv_namespaces = [
@@ -15,3 +15,9 @@ binding = "D1"
 database_name = "ooo"
 database_id = "b1297ba8-5733-47ed-aa89-9a2f4c4a310d"
 
+[dev]
+local_protocol = "https"
+upstream_protocol = "https"
+
+[site]
+bucket = "./public"

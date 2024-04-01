@@ -4,7 +4,8 @@
 
 	let ws: WebSocket;
 	const open = () => {
-		ws = new WebSocket(`wss://${location.host}/api/hello`);
+		message='connecting...'
+		ws = new WebSocket(`${location.protocol[5]?'wss':'ws'}://${location.host}/api/hello`);
 		ws.onopen = () => {
 			message = 'open';
 		};
@@ -32,6 +33,7 @@
 <Box name="Websocket">
 	<input bind:value />
 	<button on:click={send}>Send</button>
+	<button on:click={open}>ReConnect</button>
 	<textarea readonly>{message}</textarea>
 </Box>
 
