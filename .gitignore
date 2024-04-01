@@ -2,7 +2,6 @@
 node_modules
 /build
 /.svelte-kit
-/repo
 .env.example
 !.env.example
 vite.config.js.timestamp-*

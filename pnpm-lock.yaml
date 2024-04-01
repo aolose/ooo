@@ -80,8 +80,8 @@ devDependencies:
     specifier: ^5.1.5
     version: 5.1.5(sass@1.71.1)
   vite-sveltekit-cf-ws:
-    specifier: file:./packages/vite-sveltekit-cf-ws
-    version: file:packages/vite-sveltekit-cf-ws
+    specifier: file:./repo
+    version: file:repo
   vitest:
     specifier: ^1.3.1
     version: 1.3.1(sass@1.71.1)
@@ -3071,12 +3071,7 @@ packages:
     resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: true
 
-  file:packages/vite-sveltekit-cf-ws:
-    resolution: {directory: packages/vite-sveltekit-cf-ws, type: directory}
+  file:repo:
+    resolution: {directory: repo, type: directory}
     name: vite-sveltekit-cf-ws
-    dependencies:
-      ws: 8.16.0
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
     dev: true
