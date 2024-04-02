@@ -148,7 +148,6 @@ export const arrayify = (o: Data): ArrayIfyResult => {
 				addEnd(e);
 				if (type === Types.String || type === Types.Number) vs.push(0);
 			}
-			// console.log({ks,vs})
 		}
 		n = ks.length ? ks.concat(0).concat(vs.slice(0, last)) : [];
 		s = s.concat(n);
@@ -218,11 +217,12 @@ export const parseArray: typeof ParseArray = <T>(
 	} else if (t === Types.String) {
 		const s = type ? index : index + 1;
 		let i = s;
-		while (arr[i]) i++;
+		// string code need >7
+		while (arr[i]>7) i++;
 		const a = arr2Str(arr.slice(s, i));
 		if (parent) {
 			attachToParent(a);
-			return i + 1;
+			return arr[i]?i:i + 1;
 		}
 		return a;
 	} else if (t === Types.Array) {
@@ -240,6 +240,7 @@ export const parseArray: typeof ParseArray = <T>(
 			i = e + 1;
 			for (let t = s; t < e; t++) {
 				const tp = arr[t];
+				const isNull = tp===5
 				if (tp > 7) {
 					const nn = tp - 7;
 					const ne = i + nn;

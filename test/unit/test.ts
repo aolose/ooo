@@ -69,6 +69,16 @@ describe('test jsonEnc and jsonDec', () => {
 		expect(parseArray(arrayify(a))).toEqual(json(a));
 	});
 
+	it('Array 4', async () => {
+		const a = [['a',null],1];
+		expect(parseArray(arrayify(a))).toEqual(json(a));
+	});
+
+	it('Array 5', async () => {
+		const a = [['',null],null];
+		expect(parseArray(arrayify(a))).toEqual(json(a));
+	});
+
 	it('Empty String', () => {
 		expect(parseArray(arrayify(''))).toEqual('');
 	});
