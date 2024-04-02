@@ -7,32 +7,39 @@ import { parseArray } from '$lib/utils';
 import mime from 'mime';
 import { ecdh } from '$lib/crypto';
 
-let logs = [] as string[]
-export const devLog = (type:number,data:unknown)=>{
-	if(/api\/log/.test(`${data}`))return
-	logs.push(`${new Date().toTimeString()} ${type} ${data}`)
-	const len = logs.length
-	const max = 100
-	if(len>max) logs = logs.slice(len-max)
-}
+let logs = [] as string[];
+export const devLog = (...data: unknown[]) => {
+	if (/api\/log/.test(`${data}`)) return;
+	logs.push(`${new Date().toTimeString()} ${data.join(' ')}`);
+	const len = logs.length;
+	const max = 100;
+	if (len > max) logs = logs.slice(len - max);
+};
 
 export const Apis: APIRoute = {
-	log:{
-	  GET(){
-		  const s = logs.slice()
-		  logs.length=0
-		  return s
-	  }
+	log: {
+		GET() {
+			const s = logs.slice();
+			logs.length = 0;
+			return s;
+		}
 	},
 	hello: {
 		async POST({ data }) {
 			if (data) return await ecdh.init(data);
 		},
 		async WS(serv) {
+			serv.accept();
 			serv.addEventListener('error', function (e) {
-				serv.send(e.toString())
+				devLog('error', e);
+				serv.send(e.toString());
+			});
+			serv.addEventListener('close', function (e) {
+				devLog('close', e);
+				serv.send(e.reason);
 			});
 			serv.addEventListener('message', function (e) {
+				devLog('message', e);
 				serv.send('echo:' + e.data);
 			});
 		}
