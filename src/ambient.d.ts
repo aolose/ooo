@@ -1,5 +1,5 @@
 import { D1Database, R2Bucket, KVNamespace } from '@cloudflare/workers-types';
-import {WebSocket} from "@cloudflare/workers-types/2023-07-01/index";
+import { WebSocket } from '@cloudflare/workers-types/2023-07-01/index';
 
 type CacheConfig = { expire?: number; key?: string | (() => string) };
 type KVItem = string | ArrayBuffer | ArrayBufferView | ReadableStream;
@@ -26,7 +26,7 @@ type APIHandler = {
 	PATCH?: ApiFunction<ArrayBuffer | undefined>;
 	GET?: ApiFunction<string | undefined>;
 	DELETE?: ApiFunction<string | undefined>;
-	WS?:  (server: WebSocket) => void
+	WS?: (server: WebSocket) => void;
 };
 
 type APIRoute = {

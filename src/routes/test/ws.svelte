@@ -4,8 +4,8 @@
 
 	let ws: WebSocket;
 	const open = () => {
-		message='connecting...'
-		ws = new WebSocket(`${location.protocol[5]?'wss':'ws'}://${location.host}/api/hello`);
+		message = 'connecting...';
+		ws = new WebSocket(`${location.protocol[5] ? 'wss' : 'ws'}://${location.host}/api/hello`);
 		ws.onopen = () => {
 			message = 'open';
 		};
