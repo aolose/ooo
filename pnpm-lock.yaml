@@ -80,8 +80,8 @@ devDependencies:
     specifier: ^5.2.7
     version: 5.2.7(sass@1.72.0)
   vite-sveltekit-cf-ws:
-    specifier: ^0.2.1
-    version: 0.2.1
+    specifier: ^0.2.2
+    version: 0.2.3
   vitest:
     specifier: ^1.4.0
     version: 1.4.0(sass@1.72.0)
@@ -3197,8 +3197,8 @@ packages:
       - terser
     dev: true
 
-  /vite-sveltekit-cf-ws@0.2.1:
-    resolution: {integrity: sha512-QPVHJtwYhLCPKQseHAUBYQ7Y+ebDioSKEScpq/YdHXjmun4ip9cUA4Ev9DyZMaJR/nnDpUFwKN8roayakrL2Pw==}
+  /vite-sveltekit-cf-ws@0.2.3:
+    resolution: {integrity: sha512-HYhETRJas6g4gpEiFzimMhkjUOFaMfrCIJmX5SteqSCl+9SJwCXdYUoc8HmQ0BtyT8mACjeWy/gDZ6PCAHZoYA==}
     dev: true
 
   /vite@5.2.7(sass@1.72.0):
