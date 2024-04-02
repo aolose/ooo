@@ -80,8 +80,8 @@ devDependencies:
     specifier: ^5.2.7
     version: 5.2.7(sass@1.72.0)
   vite-sveltekit-cf-ws:
-    specifier: ./packages/sveltekit-cf-ws
-    version: link:packages/sveltekit-cf-ws
+    specifier: ^0.2.1
+    version: 0.2.1
   vitest:
     specifier: ^1.4.0
     version: 1.4.0(sass@1.72.0)
@@ -3195,6 +3195,10 @@ packages:
       - sugarss
       - supports-color
       - terser
+    dev: true
+
+  /vite-sveltekit-cf-ws@0.2.1:
+    resolution: {integrity: sha512-QPVHJtwYhLCPKQseHAUBYQ7Y+ebDioSKEScpq/YdHXjmun4ip9cUA4Ev9DyZMaJR/nnDpUFwKN8roayakrL2Pw==}
     dev: true
 
   /vite@5.2.7(sass@1.72.0):
