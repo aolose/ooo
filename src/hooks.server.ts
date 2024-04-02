@@ -3,17 +3,17 @@ import { apiHandler } from '$lib/server/apiHandler';
 import { filter } from '$lib/server/firewall';
 import { connect } from '$lib/server/setup';
 import { execSchema } from '$lib/server/schema';
-import {Apis, devLog} from "$lib/server/apis";
-import {bind, watchLog} from "vite-sveltekit-cf-ws";
+import {Apis} from "$lib/server/apis";
+import {handleUpgrade} from "vite-sveltekit-cf-ws";
 
 
 let once = 0
 const initSockets = ()=>{
-	watchLog(a=>devLog(0,a))
-	Object.entries(Apis).forEach(([path,m])=>{
-		if(m.WS){
-			bind('/api/'+path,m.WS)
-		}
+	if(!once++)return
+	handleUpgrade((req,createWs)=>{
+		const pathname = new URL(req.url||'','ws://base.url').pathname
+		const fn = Apis[pathname.slice(5)]?.WS
+		if(fn){fn(createWs())}
 	})
 }
 

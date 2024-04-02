@@ -8,9 +8,9 @@ import mime from 'mime';
 import { ecdh } from '$lib/crypto';
 
 let logs = [] as string[]
-export const devLog = (type:number,data:unknown)=>{
+export const devLog = (...data:unknown[])=>{
 	if(/api\/log/.test(`${data}`))return
-	logs.push(`${new Date().toTimeString()} ${type} ${data}`)
+	logs.push(`${new Date().toTimeString()} ${data.join(' ')}`)
 	const len = logs.length
 	const max = 100
 	if(len>max) logs = logs.slice(len-max)
@@ -29,10 +29,17 @@ export const Apis: APIRoute = {
 			if (data) return await ecdh.init(data);
 		},
 		async WS(serv) {
+			serv.accept()
 			serv.addEventListener('error', function (e) {
+				devLog('error',e)
 				serv.send(e.toString())
 			});
+			serv.addEventListener('close', function (e) {
+				devLog('close',e)
+				serv.send(e.reason)
+			});
 			serv.addEventListener('message', function (e) {
+				devLog('message',e)
 				serv.send('echo:' + e.data);
 			});
 		}
