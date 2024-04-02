@@ -8,7 +8,7 @@ import { handleUpgrade } from 'vite-sveltekit-cf-ws';
 
 let once = 0;
 const initSockets = () => {
-	if (!once++) return;
+	once++
 	handleUpgrade((req, createWs) => {
 		const pathname = new URL(req.url || '', 'ws://base.url').pathname;
 		const fn = Apis[pathname.slice(5)]?.WS;
@@ -19,7 +19,7 @@ const initSockets = () => {
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
-	if (!once++) initSockets();
+	if (!once) initSockets();
 	await connect(event.platform?.env, execSchema);
 	if (event.url.pathname.startsWith('/api/')) {
 		return apiHandler(event);
